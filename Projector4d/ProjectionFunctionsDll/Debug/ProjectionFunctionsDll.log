@@ -1,8 +1,0 @@
-﻿  Assembling Implementations.asm...
-Implementations.asm(109): warning A6004: procedure argument or local not referenced : rows2
-  stdafx.cpp
-  dllmain.cpp
-  ProjectionFunctionsDll.cpp
-  Generating Code...
-     Creating library D:\Studia\SEM5\ja\Projekt\Projector4d\Debug\ProjectionFunctionsDll.lib and object D:\Studia\SEM5\ja\Projekt\Projector4d\Debug\ProjectionFunctionsDll.exp
-  ProjectionFunctionsDll.vcxproj -> D:\Studia\SEM5\ja\Projekt\Projector4d\Debug\ProjectionFunctionsDll.dll
