@@ -13,5 +13,6 @@ namespace AsmImplementations {
 	void DLLEXPORT project3dOrtographic(unsigned int cols, unsigned int rows, double* arr, double *outarr);
 	void DLLEXPORT project2dPerspective(unsigned int cols, unsigned int rows, double* arr, double *outarr, double distance);
 	void DLLEXPORT project3dPerspective(unsigned int cols, unsigned int rows, double* arr, double *outarr, double distance);
+	void DLLEXPORT rotate(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
 	int DLLEXPORT test(int xd);
 }

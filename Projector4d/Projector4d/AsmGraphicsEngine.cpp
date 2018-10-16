@@ -46,22 +46,24 @@ Vector3d AsmGraphicsEngine::project3dPerspective(Vector4d point, double distance
 	return result;
 }
 
-Vector2d AsmGraphicsEngine::rotate(Vector2d point) const
+Vector2d AsmGraphicsEngine::rotate(Vector2d point, double angle) const
+{
+	Vector2d result;
+	AsmImplementations::rotate(point.get_cols(), point.get_rows(), point.data, result.data, angle);
+	return result;
+}
+
+Vector2d AsmGraphicsEngine::rotateX(Vector3d point, double angle) const
 {
 	return Vector2d();
 }
 
-Vector2d AsmGraphicsEngine::rotateX(Vector3d point) const
+Vector2d AsmGraphicsEngine::rotateY(Vector2d point, double angle) const
 {
 	return Vector2d();
 }
 
-Vector2d AsmGraphicsEngine::rotateY(Vector2d point) const
-{
-	return Vector2d();
-}
-
-Vector2d AsmGraphicsEngine::rotateZ(Vector2d point) const
+Vector2d AsmGraphicsEngine::rotateZ(Vector2d point, double angle) const
 {
 	return Vector2d();
 }

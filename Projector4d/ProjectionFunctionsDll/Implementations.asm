@@ -311,6 +311,100 @@ projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 projectPerspectiveImplementation endp
 ; -------------------------------------------------------------------------------
 
+; fills rotation matrix, which rotates specified axis
+; -------------------------------------------------------------------------------
+fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8, axis1: DWORD, axis2: DWORD
+	push arr
+	push rows
+	push cols
+	call fillIdentityMatrixImplementation			; prepare matrix
+	add esp, 12
+
+	push cols
+	push axis1
+	push axis1
+	call calculateMatrixIndex
+	mul [DOUBLE_SIZE]
+	add eax, arr
+	fld angle
+	fcos
+	fst REAL8 PTR [eax]								; write cos(angle)
+
+	push cols
+	push axis2
+	push axis2
+	call calculateMatrixIndex
+	mul [DOUBLE_SIZE]
+	add eax, arr
+	fst REAL8 PTR [eax]								; write cos(angle)
+
+	push cols
+	push axis2
+	push axis1
+	call calculateMatrixIndex
+	mul [DOUBLE_SIZE]
+	add eax, arr
+	fld angle
+	fsin
+	fst REAL8 PTR [eax]								; write sin(angle)
+	movsd xmm0, REAL8 PTR [eax]
+
+	push cols
+	push axis1
+	push axis2
+	call calculateMatrixIndex
+	mul [DOUBLE_SIZE]
+	add eax, arr
+	movsd xmm1, xmm0								; calculate -sin, given sin
+	subsd xmm0, xmm1
+	subsd xmm0, xmm1
+	movsd REAL8 PTR [eax], xmm0						; write -sin(angle)
+	ret
+fillRotationMatrixImplementation endp
+; -------------------------------------------------------------------------------
+
+
+; rotates 2d vector
+; -------------------------------------------------------------------------------
+rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, angle: REAL8
+	movsd xmm0, angle
+	push 2
+	push 2
+	call allocateMatrix
+	add esp, 8
+	push eax											; allocate rotation matrix
+
+	push 1
+	push 0
+	sub esp, 8											; equal to
+	movsd REAL8 PTR [esp], xmm0							; push angle
+	push eax
+	push 2
+	push 2
+	call fillRotationMatrixImplementation				; filling rotation matrix
+	add esp, 28
+	pop eax
+	push eax
+
+	push outarr
+	push arr
+	push rows
+	push cols
+	push eax
+	push 2
+	push 2
+	call multiplyMatrixImplementation					; performing rotation
+	add esp, 28
+
+	pop eax
+	push eax
+	call deallocateMatrix
+	add esp, 4
+	ret
+rotateImplementation endp
+; -------------------------------------------------------------------------------
+
+
 extern malloc:proc
 extern free:proc
 testIMP proc i: DWORD

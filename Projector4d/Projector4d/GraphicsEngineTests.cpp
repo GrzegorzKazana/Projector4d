@@ -87,7 +87,11 @@ bool GraphicsEngineTests::testproject3dPerspective4d(const IGraphicsEngine & eng
 bool GraphicsEngineTests::testrotate(const IGraphicsEngine & eng)
 {
 	std::cout << "Testing rotate" << std::endl;
-	bool success = false;
+	Vector2d point(0.4, -0.5);
+	double angle = 0.3;
+	Vector2d result = eng.rotate(point, angle);
+	Vector2d target(0.529894698978, -0.359460161896);
+	bool success = result == target;
 	std::cout << (success ? "Succeed" : "Failed") << std::endl;
 	return success;
 }
