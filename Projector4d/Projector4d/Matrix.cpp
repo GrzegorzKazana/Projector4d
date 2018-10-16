@@ -105,7 +105,7 @@ bool Matrix::operator==(const Matrix & other)
 		return false;
 	}
 	for (unsigned int i = 0; i < rows*cols; i++) {
-		//std::cout << data[i] << other.data[i] << std::endl;
+		//std::cout << data[i] << "	" << other.data[i] << std::endl;
 		if (abs(data[i] - other.data[i]) >= std::numeric_limits<float>::epsilon()) {
 			return false;
 		}

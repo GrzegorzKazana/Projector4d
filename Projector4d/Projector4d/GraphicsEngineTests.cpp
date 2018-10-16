@@ -99,7 +99,11 @@ bool GraphicsEngineTests::testrotate(const IGraphicsEngine & eng)
 bool GraphicsEngineTests::testrotateX(const IGraphicsEngine & eng)
 {
 	std::cout << "Testing rotateX" << std::endl;
-	bool success = false;
+	Vector3d point(0.4, -0.5, 1.0);
+	double angle = 0.3;
+	Vector3d result = eng.rotateX(point, angle);
+	Vector3d target(0.4, -0.773188451220, 0.807576385790);
+	bool success = result == target;
 	std::cout << (success ? "Succeed" : "Failed") << std::endl;
 	return success;
 }
@@ -107,7 +111,11 @@ bool GraphicsEngineTests::testrotateX(const IGraphicsEngine & eng)
 bool GraphicsEngineTests::testrotateY(const IGraphicsEngine & eng)
 {
 	std::cout << "Testing rotateY" << std::endl;
-	bool success = false;
+	Vector3d point(0.4, -0.5, 1.0);
+	double angle = 0.3;
+	Vector3d result = eng.rotateY(point, angle);
+	Vector3d target(0.086614388988, -0.5, 1.073544571784);
+	bool success = result == target;
 	std::cout << (success ? "Succeed" : "Failed") << std::endl;
 	return success;
 }
@@ -115,7 +123,11 @@ bool GraphicsEngineTests::testrotateY(const IGraphicsEngine & eng)
 bool GraphicsEngineTests::testrotateZ(const IGraphicsEngine & eng)
 {
 	std::cout << "Testing rotateZ" << std::endl;
-	bool success = false;
+	Vector3d point(0.4, -0.5, 1.0);
+	double angle = 0.3;
+	Vector3d result = eng.rotateZ(point, angle);
+	Vector3d target(0.529894698978, -0.359460161896, 1.0);
+	bool success = result == target;
 	std::cout << (success ? "Succeed" : "Failed") << std::endl;
 	return success;
 }

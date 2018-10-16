@@ -364,23 +364,23 @@ fillRotationMatrixImplementation endp
 ; -------------------------------------------------------------------------------
 
 
-; rotates 2d vector
+; rotates vector
 ; -------------------------------------------------------------------------------
-rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, angle: REAL8
-	movsd xmm0, angle
-	push 2
-	push 2
+rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, angle: REAL8, axis0: DWORD, axis1: DWORD
+	push rows
+	push rows
 	call allocateMatrix
 	add esp, 8
 	push eax											; allocate rotation matrix
 
-	push 1
-	push 0
+	movsd xmm0, angle
+	push axis1
+	push axis0
 	sub esp, 8											; equal to
 	movsd REAL8 PTR [esp], xmm0							; push angle
 	push eax
-	push 2
-	push 2
+	push rows
+	push rows
 	call fillRotationMatrixImplementation				; filling rotation matrix
 	add esp, 28
 	pop eax
@@ -391,8 +391,8 @@ rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, a
 	push rows
 	push cols
 	push eax
-	push 2
-	push 2
+	push rows
+	push rows
 	call multiplyMatrixImplementation					; performing rotation
 	add esp, 28
 
