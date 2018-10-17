@@ -1,0 +1,52 @@
+#include "stdafx.h"
+#include "Canvas.h"
+#include "Matrix.h"
+
+
+Canvas::Canvas(sf::ContextSettings settings)
+	:sf::RenderWindow(sf::VideoMode(400, 400), "SFML shapes", sf::Style::Default, settings)
+{
+	sf::Vector2u size = this->getSize();
+	this->width_ = size.x;
+	this->height_ = size.y;
+}
+
+void Canvas::drawPoint(Vector2d vec)
+{
+	float defult_radius = 5.f;
+	sf::CircleShape point(defult_radius);
+	point.setOrigin(defult_radius, defult_radius);
+	point.setPosition(scaleWidth(vec.getX()), scaleHeight(vec.getY()));
+	this->draw(point);
+}
+
+void Canvas::drawLine(Vector2d p0, Vector2d p1)
+{
+	Vector2d p0_scaled = Vector2d(scaleWidth(p0.getX()), scaleHeight(p0.getY()));
+	Vector2d p1_scaled = Vector2d(scaleWidth(p1.getX()), scaleHeight(p1.getY()));
+	Vector2d displacement = p1_scaled - p0_scaled;
+	float length = sqrt(displacement.getX()*displacement.getX() + displacement.getY()*displacement.getY());
+	float width = 4.0f;
+	sf::RectangleShape line(sf::Vector2f(length, width));
+	line.setOrigin(0.f, width / 2.0);
+	line.setPosition(p0_scaled.getX(), p0_scaled.getY());
+	line.rotate(180.0 * atan(displacement.getY() / displacement.getX()) / 3.1415 + 180.0 * (displacement.getX()<0 ? 1 : 0));
+	this->draw(line);
+}
+
+float Canvas::scaleWidth(double x)
+// accepts parameter in range <-1,1>, returns in range <0,width>
+{
+	return (1.0 + x) * this->width_ / 2.0;
+}
+
+float Canvas::scaleHeight(double y)
+// accepts parameter in range <-1,1>, returns in range <0,height>
+{
+	return (1.0 + y) * this->height_ / 2.0;
+}
+
+
+Canvas::~Canvas()
+{
+}
