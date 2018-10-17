@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include <algorithm>
 #include <iostream>
+#include "Exceptions.h"
 #include "ProjectionFunctionsDll.h"
 
 inline unsigned int index(unsigned int y, unsigned int x, unsigned int width) {
@@ -80,6 +81,40 @@ unsigned int Matrix::get_cols() const
 unsigned int Matrix::get_rows() const
 {
 	return rows;
+}
+
+Matrix Matrix::operator+(const Matrix & other) const
+{
+	if (rows != other.rows || cols != other.cols) {
+		//unmatched dimentions
+		throw MatrixUnmatchedDimensions(rows, cols, other.rows, other.cols);
+	}
+
+	Matrix result(cols, rows);
+
+	for (unsigned int y = 0; y < rows; y++) {
+		for (unsigned int x = 0; x < cols; x++) {
+			result.data[index(y, x, cols)] = data[index(y, x, other.cols)] + other.data[index(y, x, other.cols)];
+		}
+	}
+	return result;
+}
+
+Matrix Matrix::operator-(const Matrix & other) const
+{
+	if (rows != other.rows || cols != other.cols) {
+		//unmatched dimentions
+		throw MatrixUnmatchedDimensions(rows, cols, other.rows, other.cols);
+	}
+
+	Matrix result(cols, rows);
+
+	for (unsigned int y = 0; y < rows; y++) {
+		for (unsigned int x = 0; x < cols; x++) {
+			result.data[index(y, x, cols)] = data[index(y, x, other.cols)] - other.data[index(y, x, other.cols)];
+		}
+	}
+	return result;
 }
 
 Matrix& Matrix::operator=(Matrix&& other)

@@ -16,6 +16,8 @@ public:
 	double get_value(unsigned int row, unsigned int col);
 	unsigned int get_cols() const;
 	unsigned int get_rows() const;
+	Matrix operator+(const Matrix& other) const;
+	Matrix operator-(const Matrix& other) const;
 	Matrix& operator=(Matrix&& other);
 	Matrix& operator=(const Matrix& other);
 	bool operator==(const Matrix& other);
