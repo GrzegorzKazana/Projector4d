@@ -34,6 +34,13 @@ void Canvas::drawLine(Vector2d p0, Vector2d p1)
 	this->draw(line);
 }
 
+void Canvas::drawSquare(Square hedron)
+{
+	for (auto p : hedron.getVertices()) {
+		drawPoint(p);
+	}
+}
+
 float Canvas::scaleWidth(double x)
 // accepts parameter in range <-1,1>, returns in range <0,width>
 {
