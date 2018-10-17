@@ -328,7 +328,8 @@ fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angl
 	add eax, arr
 	fld angle
 	fcos
-	fst REAL8 PTR [eax]								; write cos(angle)
+	fstp REAL8 PTR [eax]								; write cos(angle)
+	movsd xmm0, REAL8 PTR [eax]
 
 	push cols
 	push axis2
@@ -336,7 +337,7 @@ fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angl
 	call calculateMatrixIndex
 	mul [DOUBLE_SIZE]
 	add eax, arr
-	fst REAL8 PTR [eax]								; write cos(angle)
+	movsd REAL8 PTR [eax], xmm0
 
 	push cols
 	push axis2
@@ -344,9 +345,11 @@ fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angl
 	call calculateMatrixIndex
 	mul [DOUBLE_SIZE]
 	add eax, arr
+	movsd xmm0, angle
+	movsd REAL8 PTR [eax], xmm0
 	fld angle
 	fsin
-	fst REAL8 PTR [eax]								; write sin(angle)
+	fstp REAL8 PTR [eax]								; write sin(angle)
 	movsd xmm0, REAL8 PTR [eax]
 
 	push cols
