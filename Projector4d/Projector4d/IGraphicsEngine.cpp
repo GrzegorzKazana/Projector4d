@@ -1,92 +1,92 @@
 #include "stdafx.h"
 #include "IGraphicsEngine.h"
 
-Square IGraphicsEngine::project2dOrtographic(Cube hedron) const
+Mesh2d IGraphicsEngine::project2dOrtographic(Mesh3d hedron) const
 {
 	std::vector<Vector2d> res;
 	for (Vector3d p : hedron.getVertices()) {
 		res.push_back(project2dOrtographic(p));
 	}
-	return Square(res);
+	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Square IGraphicsEngine::project2dOrtographic(Tesseract hedron) const
+Mesh2d IGraphicsEngine::project2dOrtographic(Mesh4d hedron) const
 {
 	std::vector<Vector2d> res;
 	for (Vector4d p : hedron.getVertices()) {
 		res.push_back(project2dOrtographic(p));
 	}
-	return Square(res);
+	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Cube IGraphicsEngine::project3dOrtographic(Tesseract hedron) const
+Mesh3d IGraphicsEngine::project3dOrtographic(Mesh4d hedron) const
 {
 	std::vector<Vector3d> res;
 	for (Vector4d p : hedron.getVertices()) {
 		res.push_back(project3dOrtographic(p));
 	}
-	return Cube(res);
+	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Square IGraphicsEngine::project2dPerspective(Cube hedron, double distance) const
+Mesh2d IGraphicsEngine::project2dPerspective(Mesh3d hedron, double distance) const
 {
 	std::vector<Vector2d> res;
 	for (Vector3d p : hedron.getVertices()) {
 		res.push_back(project2dPerspective(p));
 	}
-	return Square(res);
+	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Square IGraphicsEngine::project2dPerspective(Tesseract hedron, double distance) const
+Mesh2d IGraphicsEngine::project2dPerspective(Mesh4d hedron, double distance) const
 {
 	std::vector<Vector2d> res;
 	for (Vector4d p : hedron.getVertices()) {
 		res.push_back(project2dPerspective(p));
 	}
-	return Square(res);
+	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Cube IGraphicsEngine::project3dPerspective(Tesseract hedron, double distance) const
+Mesh3d IGraphicsEngine::project3dPerspective(Mesh4d hedron, double distance) const
 {
 	std::vector<Vector3d> res;
 	for (Vector4d p : hedron.getVertices()) {
-		res.push_back(project3dPerspective(p));
+		res.push_back(project3dPerspective(p, distance));
 	}
-	return Cube(res);
+	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Square IGraphicsEngine::rotate(Square hedron, double angle) const
+Mesh2d IGraphicsEngine::rotate(Mesh2d hedron, double angle) const
 {
 	std::vector<Vector2d> res;
 	for (Vector2d p : hedron.getVertices()) {
 		res.push_back(rotate(p, angle));
 	}
-	return Square(res);
+	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Cube IGraphicsEngine::rotateX(Cube hedron, double angle) const
+Mesh3d IGraphicsEngine::rotateX(Mesh3d hedron, double angle) const
 {
 	std::vector<Vector3d> res;
 	for (Vector3d p : hedron.getVertices()) {
 		res.push_back(rotateX(p, angle));
 	}
-	return Cube(res);
+	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Cube IGraphicsEngine::rotateY(Cube hedron, double angle) const
+Mesh3d IGraphicsEngine::rotateY(Mesh3d hedron, double angle) const
 {
 	std::vector<Vector3d> res;
 	for (Vector3d p : hedron.getVertices()) {
 		res.push_back(rotateY(p, angle));
 	}
-	return Cube(res);
+	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Cube IGraphicsEngine::rotateZ(Cube hedron, double angle) const
+Mesh3d IGraphicsEngine::rotateZ(Mesh3d hedron, double angle) const
 {
 	std::vector<Vector3d> res;
 	for (Vector3d p : hedron.getVertices()) {
 		res.push_back(rotateZ(p, angle));
 	}
-	return Cube(res);
+	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }

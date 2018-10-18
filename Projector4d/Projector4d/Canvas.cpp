@@ -35,7 +35,7 @@ void Canvas::drawLine(Vector2d p0, Vector2d p1)
 	this->draw(line);
 }
 
-void Canvas::drawSquare(Square hedron)
+void Canvas::draw2dMesh(Mesh2d hedron)
 {
 	std::vector<Vector2d> points = hedron.getVertices();
 	for (auto p : points) {

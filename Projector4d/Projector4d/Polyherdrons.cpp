@@ -2,12 +2,12 @@
 #include "Polyherdrons.h"
 
 
-std::vector<std::pair<unsigned int, unsigned int>> IPolyhedron::getEdges() const
+std::vector<std::pair<unsigned int, unsigned int>> IMeshNd::getEdges() const
 {
 	return edge_idx;
 }
 
-Cube::Cube()
+Mesh3d::Mesh3d()
 {
 	vertix_n = 8;
 	edge_n = 12;
@@ -27,24 +27,20 @@ Cube::Cube()
 	}
 }
 
-std::vector<Vector3d> Cube::getVertices()
+std::vector<Vector3d> Mesh3d::getVertices()
 {
 	return vertices;
 }
 
-Cube::Cube(std::vector<Vector3d> vets)
+Mesh3d::Mesh3d(std::vector<Vector3d> vets, std::vector<std::pair<unsigned int, unsigned int>> edges)
 {
 	vertix_n = 8;
 	edge_n = 12;
 	vertices = vets;
-	for (unsigned int i = 0; i < 4; i++) {
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(i, (i + 1) % 4));
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(4 + i, 4 + (i + 1) % 4));
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(i, i + 4));
-	}
+	edge_idx = edges;
 }
 
-Square::Square()
+Mesh2d::Mesh2d()
 {
 	vertix_n = 4;
 	edge_n = 4;
@@ -58,23 +54,21 @@ Square::Square()
 	}
 }
 
-std::vector<Vector2d> Square::getVertices()
+std::vector<Vector2d> Mesh2d::getVertices()
 {
 	return vertices;
 }
 
-Square::Square(std::vector<Vector2d> vets)
+Mesh2d::Mesh2d(std::vector<Vector2d> vets, std::vector<std::pair<unsigned int, unsigned int>> edges)
 {
 	vertix_n = 4;
 	edge_n = 4;
 	double default_coor = 0.5;
 	vertices = vets;
-	for (unsigned int i = 0; i < 4; i++) {
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(i, (i + 1) % 4));
-	}
+	edge_idx = edges;
 }
 
-Tesseract::Tesseract()
+Mesh4d::Mesh4d()
 {
 	vertix_n = 16;
 	edge_n = 32;
@@ -110,27 +104,15 @@ Tesseract::Tesseract()
 	}
 }
 
-std::vector<Vector4d> Tesseract::getVertices()
+std::vector<Vector4d> Mesh4d::getVertices()
 {
 	return vertices;
 }
 
-Tesseract::Tesseract(std::vector<Vector4d> vets)
+Mesh4d::Mesh4d(std::vector<Vector4d> vets, std::vector<std::pair<unsigned int, unsigned int>> edges)
 {
 	vertix_n = 8;
 	edge_n = 12;
 	vertices = vets;
-	for (unsigned int i = 0; i < 4; i++) {
-		// connect 1st cube
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(i, (i + 1) % 4));
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(4 + i, 4 + (i + 1) % 4));
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(i, i + 4));
-		// connect 2nd cube
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(8 + i, 8 + (i + 1) % 4));
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(8 + 4 + i, 8 + 4 + (i + 1) % 4));
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(8 + i, 8 + i + 4));
-		// connect cubes
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(i, i + 8));
-		edge_idx.push_back(std::pair<unsigned int, unsigned int>(4 + i, 4 + i + 8));
-	}
+	edge_idx = edges;
 }

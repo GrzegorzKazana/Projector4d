@@ -11,7 +11,7 @@ public:
 	Canvas(sf::ContextSettings settings);
 	void drawPoint(Vector2d point);
 	void drawLine(Vector2d p1, Vector2d p2);
-	void drawSquare(Square hedron);
+	void draw2dMesh(Mesh2d hedron);
 	float scaleWidth(double x);
 	float scaleHeight(double y);
 	~Canvas();

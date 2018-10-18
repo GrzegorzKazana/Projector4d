@@ -3,7 +3,7 @@
 #include "Matrix.h"
 #include "Vectors.h"
 
-class IPolyhedron
+class IMeshNd
 {
 protected:
 	unsigned int vertix_n;
@@ -11,30 +11,30 @@ protected:
 	std::vector<std::pair<unsigned int, unsigned int>> edge_idx;
 public:
 	std::vector<std::pair<unsigned int, unsigned int>> getEdges() const;
-	virtual ~IPolyhedron() = 0 {};
+	virtual ~IMeshNd() = 0 {};
 };
 
-class Square : public IPolyhedron {
+class Mesh2d : public IMeshNd {
 	std::vector<Vector2d> vertices;
 public:
-	Square();
+	Mesh2d();
 	std::vector<Vector2d> getVertices();
-	Square(std::vector<Vector2d> vets);
+	Mesh2d(std::vector<Vector2d> vets, std::vector<std::pair<unsigned int, unsigned int>> edges);
 };
 
-class Cube : public IPolyhedron {
+class Mesh3d : public IMeshNd {
 	std::vector<Vector3d> vertices;
 public:
-	Cube();
+	Mesh3d();
 	std::vector<Vector3d> getVertices();
-	Cube(std::vector<Vector3d> vets);
+	Mesh3d(std::vector<Vector3d> vets, std::vector<std::pair<unsigned int, unsigned int>> edges);
 };
 
-class Tesseract : public IPolyhedron {
+class Mesh4d : public IMeshNd {
 	std::vector<Vector4d> vertices;
 public:
-	Tesseract();
+	Mesh4d();
 	std::vector<Vector4d> getVertices();
-	Tesseract(std::vector<Vector4d> vets);
+	Mesh4d(std::vector<Vector4d> vets, std::vector<std::pair<unsigned int, unsigned int>> edges);
 };
 

@@ -14,16 +14,16 @@ public:
 	virtual Vector3d rotateX(Vector3d point, double angle) const = 0;
 	virtual Vector3d rotateY(Vector3d point, double angle) const = 0;
 	virtual Vector3d rotateZ(Vector3d point, double angle) const = 0;
-	Square project2dOrtographic(Cube hedron) const;
-	Square project2dOrtographic(Tesseract hedron) const;
-	Cube project3dOrtographic(Tesseract hedron) const;
-	Square project2dPerspective(Cube hedron, double distance = 2) const;
-	Square project2dPerspective(Tesseract hedron, double distance = 2) const;
-	Cube project3dPerspective(Tesseract hedron, double distance = 2) const;
-	Square rotate(Square hedron, double angle) const;
-	Cube rotateX(Cube hedron, double angle) const;
-	Cube rotateY(Cube hedron, double angle) const;
-	Cube rotateZ(Cube hedron, double angle) const;
+	Mesh2d project2dOrtographic(Mesh3d hedron) const;
+	Mesh2d project2dOrtographic(Mesh4d hedron) const;
+	Mesh3d project3dOrtographic(Mesh4d hedron) const;
+	Mesh2d project2dPerspective(Mesh3d hedron, double distance = 2) const;
+	Mesh2d project2dPerspective(Mesh4d hedron, double distance = 2) const;
+	Mesh3d project3dPerspective(Mesh4d hedron, double distance = 2) const;
+	Mesh2d rotate(Mesh2d hedron, double angle) const;
+	Mesh3d rotateX(Mesh3d hedron, double angle) const;
+	Mesh3d rotateY(Mesh3d hedron, double angle) const;
+	Mesh3d rotateZ(Mesh3d hedron, double angle) const;
 	virtual ~IGraphicsEngine() = 0 {};
 };
 
