@@ -3,8 +3,8 @@
 #include "Matrix.h"
 
 
-Canvas::Canvas(sf::ContextSettings settings)
-	:sf::RenderWindow(sf::VideoMode(400, 400), "SFML shapes", sf::Style::Default, settings)
+Canvas::Canvas(sf::VideoMode size, sf::ContextSettings settings)
+	:sf::RenderWindow(size, "SFML shapes", sf::Style::Default, settings)
 {
 	sf::Vector2u size = this->getSize();
 	this->width_ = size.x;
