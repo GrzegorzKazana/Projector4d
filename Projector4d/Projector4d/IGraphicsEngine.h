@@ -15,6 +15,7 @@ public:
 	virtual Vector3d rotateY(Vector3d point, double angle) const = 0;
 	virtual Vector3d rotateZ(Vector3d point, double angle) const = 0;
 	virtual Vector4d rotateYZ(Vector4d point, double angle) const = 0;
+	virtual Vector4d rotateW(Vector4d point, double angle) const = 0;
 	Mesh2d project2dOrtographic(Mesh3d hedron) const;
 	Mesh2d project2dOrtographic(Mesh4d hedron) const;
 	Mesh3d project3dOrtographic(Mesh4d hedron) const;
@@ -26,6 +27,7 @@ public:
 	Mesh3d rotateY(Mesh3d hedron, double angle) const;
 	Mesh3d rotateZ(Mesh3d hedron, double angle) const;
 	Mesh4d rotateYZ(Mesh4d hedron, double angle) const;
+	Mesh4d rotateW(Mesh4d hedron, double angle) const;
 	virtual ~IGraphicsEngine() = 0 {};
 };
 

@@ -18,5 +18,6 @@ namespace AsmImplementations {
 	void DLLEXPORT rotateY(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
 	void DLLEXPORT rotateZ(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
 	void DLLEXPORT rotateYZ(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
+	void DLLEXPORT rotateW(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
 	int DLLEXPORT test(int xd);
 }

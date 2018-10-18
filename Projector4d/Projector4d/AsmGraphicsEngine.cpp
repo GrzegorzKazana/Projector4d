@@ -81,6 +81,13 @@ Vector4d AsmGraphicsEngine::rotateYZ(Vector4d point, double angle) const
 	return result;
 }
 
+Vector4d AsmGraphicsEngine::rotateW(Vector4d point, double angle) const
+{
+	Vector4d result;
+	AsmImplementations::rotateW(point.get_cols(), point.get_rows(), point.data, result.data, angle);
+	return result;
+}
+
 AsmGraphicsEngine::~AsmGraphicsEngine()
 {
 }

@@ -99,3 +99,12 @@ Mesh4d IGraphicsEngine::rotateYZ(Mesh4d hedron, double angle) const
 	}
 	return Mesh4d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
+
+Mesh4d IGraphicsEngine::rotateW(Mesh4d hedron, double angle) const
+{
+	std::vector<Vector4d> res;
+	for (Vector4d p : hedron.getVertices()) {
+		res.push_back(rotateW(p, angle));
+	}
+	return Mesh4d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
+}
