@@ -13,6 +13,7 @@ public:
 	using IGraphicsEngine::rotateX;
 	using IGraphicsEngine::rotateY;
 	using IGraphicsEngine::rotateZ;
+	using IGraphicsEngine::rotateYZ;
 	Vector2d project2dOrtographic(Vector3d point) const override;
 	Vector2d project2dOrtographic(Vector4d point) const override;
 	Vector3d project3dOrtographic(Vector4d point) const override;
@@ -23,6 +24,7 @@ public:
 	Vector3d rotateX(Vector3d point, double angle) const override;
 	Vector3d rotateY(Vector3d point, double angle) const override;
 	Vector3d rotateZ(Vector3d point, double angle) const override;
+	Vector4d rotateYZ(Vector4d point, double angle) const override;
 	~AsmGraphicsEngine();
 };
 
