@@ -24,7 +24,8 @@ void Canvas::drawLine(Vector2d p0, Vector2d p1)
 {
 	Vector2d p0_scaled = Vector2d(scaleWidth(p0.getX()), scaleHeight(p0.getY()));
 	Vector2d p1_scaled = Vector2d(scaleWidth(p1.getX()), scaleHeight(p1.getY()));
-	Vector2d displacement = p1_scaled - p0_scaled;
+	//Vector2d displacement = p1_scaled - p0_scaled;
+	Vector2d displacement(p1_scaled.getX() - p0_scaled.getX(), p1_scaled.getY() - p0_scaled.getY());
 	float length = sqrt(displacement.getX()*displacement.getX() + displacement.getY()*displacement.getY());
 	float width = 4.0f;
 	sf::RectangleShape line(sf::Vector2f(length, width));
@@ -36,8 +37,12 @@ void Canvas::drawLine(Vector2d p0, Vector2d p1)
 
 void Canvas::drawSquare(Square hedron)
 {
-	for (auto p : hedron.getVertices()) {
+	std::vector<Vector2d> points = hedron.getVertices();
+	for (auto p : points) {
 		drawPoint(p);
+	}
+	for (auto edge : hedron.getEdges()) {
+		drawLine(points[edge.first], points[edge.second]);
 	}
 }
 
