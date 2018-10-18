@@ -3,6 +3,14 @@
 #include "Matrix.h"
 
 
+Canvas::Canvas(HWND hParent, sf::ContextSettings settings)
+	:sf::RenderWindow(hParent, settings)
+{
+	sf::Vector2u size = this->getSize();
+	this->width_ = size.x;
+	this->height_ = size.y;
+}
+
 Canvas::Canvas(sf::VideoMode size_, sf::ContextSettings settings)
 	:sf::RenderWindow(size_, "SFML shapes", sf::Style::Default, settings)
 {
