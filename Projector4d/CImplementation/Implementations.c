@@ -28,7 +28,7 @@ void multiplyMatrixImplementation(int cols1, int rows1, double* arr1, int cols2,
 		for (int j = 0; j < cols2; j++) {
 			double sum = 0.0;
 			for (int k = 0; k < cols1; k++){
-				sum += arr1[calculateMatrixIndex(k, i, cols1)] * arr1[calculateMatrixIndex(j, k, cols2)];
+				sum += arr1[calculateMatrixIndex(k, i, cols1)] * arr2[calculateMatrixIndex(j, k, cols2)];
 			}
 			outarr[calculateMatrixIndex(j, i, cols2)] = sum;
 		}
@@ -126,8 +126,8 @@ void fillDoubleRotationMatrixImplementation(int cols, int rows, double* arr, dou
 	arr[calculateMatrixIndex(2, 2, cols)] = cos_angle;
 	arr[calculateMatrixIndex(3, 3, cols)] = cos_angle;
 	arr[calculateMatrixIndex(0, 1, cols)] = sin_angle;
-	arr[calculateMatrixIndex(2, 3, cols)] = -sin_angle;
-	arr[calculateMatrixIndex(1, 0, cols)] = sin_angle;
+	arr[calculateMatrixIndex(2, 3, cols)] = sin_angle;
+	arr[calculateMatrixIndex(1, 0, cols)] = -sin_angle;
 	arr[calculateMatrixIndex(3, 2, cols)] = -sin_angle;
 }
 
