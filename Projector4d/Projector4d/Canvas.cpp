@@ -58,7 +58,7 @@ void Canvas::drawFps(double fps)
 {
 	float text_size = 15;
 	sf::Font font;
-	if (!font.loadFromFile("D:\\Studia\\SEM5\\ja\\Projekt\\Projector4d\\Debug\\arial.ttf"))
+	if (!font.loadFromFile("..\\Debug\\arial.ttf"))
 	{
 		return;
 	}
