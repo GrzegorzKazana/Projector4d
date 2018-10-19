@@ -14,4 +14,5 @@ public:
 	static bool testrotateX(const IGraphicsEngine & eng);
 	static bool testrotateY(const IGraphicsEngine & eng);
 	static bool testrotateZ(const IGraphicsEngine & eng);
+	static bool testrotateW(const IGraphicsEngine & eng);
 };

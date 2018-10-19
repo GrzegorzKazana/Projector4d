@@ -14,7 +14,8 @@ bool GraphicsEngineTests::testAll(const IGraphicsEngine & eng)
 		& testrotate(eng)
 		& testrotateX(eng)
 		& testrotateY(eng)
-		& testrotateZ(eng);
+		& testrotateZ(eng)
+		& testrotateW(eng);
 	return success;
 }
 
@@ -127,6 +128,18 @@ bool GraphicsEngineTests::testrotateZ(const IGraphicsEngine & eng)
 	double angle = 0.3;
 	Vector3d result = eng.rotateZ(point, angle);
 	Vector3d target(0.529894698978, -0.359460161896, 1.0);
+	bool success = result == target;
+	std::cout << (success ? "Succeed" : "Failed") << std::endl;
+	return success;
+}
+
+bool GraphicsEngineTests::testrotateW(const IGraphicsEngine & eng)
+{
+	std::cout << "Testing rotateW" << std::endl;
+	Vector4d point(0.4, -0.5, 1.0, 0.6);
+	double angle = 0.3;
+	Vector4d result = eng.rotateW(point, angle);
+	Vector4d target(0.529894698978, -0.359460161896, 0.778024365124, 0.868722100132);
 	bool success = result == target;
 	std::cout << (success ? "Succeed" : "Failed") << std::endl;
 	return success;

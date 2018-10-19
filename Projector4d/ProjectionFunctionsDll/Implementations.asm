@@ -1,19 +1,13 @@
-PUBLIC Dej5Asm
-
 .model flat, c
-
 includelib   msvcrtd
-
 .data
 DOUBLE_SIZE BYTE 8
 ZERO REAL8 0.0
 ONE REAL8 1.0
-.code  
+.code 
 
-Dej5Asm proc
-	mov eax, 5
-	ret
-Dej5Asm endp
+extern malloc:proc
+extern free:proc
 
 ; -------------------------------------------------------------------------------
 ; picks smaller number
@@ -69,7 +63,7 @@ rowloopend:
 	add ebx, 1							; increment idx
 	jmp rowloop
 finished:
-	ret
+	ret 20								; inner function, clear stack
 scaleMatrixImplementation endp
 ; -------------------------------------------------------------------------------
 
@@ -124,7 +118,7 @@ rowloopend:
 	add ebx, 1							; increment idx
 	jmp rowloop
 finished:
-	ret
+	ret 28								; clear stack, inner function
 multiplyMatrixImplementation endp
 ; -------------------------------------------------------------------------------
 
@@ -136,8 +130,7 @@ fillZerosMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
 	push rows
 	push cols
 	call scaleMatrixImplementation		; scale by 0
-	add esp, 20							; clear stack manually, since scaleMatrixImplementation is called from asm
-	ret 12
+	ret 12								; clear stack
 fillZerosMatrix endp
 ; -------------------------------------------------------------------------------
 
@@ -163,7 +156,7 @@ dataloop:
 	add ebx, 1
 	jmp dataloop
 finished:
-	ret
+	ret 12
 fillIdentityMatrixImplementation endp
 ; -------------------------------------------------------------------------------
 
@@ -193,7 +186,7 @@ dataloop:
 	add ebx, 1
 	jmp dataloop
 finished:
-	ret
+	ret 12
 fillOrtographicProjectionMatrixImplementation endp
 ; -------------------------------------------------------------------------------
 
@@ -206,7 +199,7 @@ allocateMatrix proc cols: DWORD, rows: DWORD
 	mul rows
 	push eax
 	call malloc
-	ret
+	ret 8
 allocateMatrix endp
 ; -------------------------------------------------------------------------------
 
@@ -215,7 +208,7 @@ allocateMatrix endp
 deallocateMatrix proc arr: DWORD
 	push arr
 	call free
-	ret
+	ret 4
 deallocateMatrix endp
 ; -------------------------------------------------------------------------------
 
@@ -225,13 +218,11 @@ projectOrtographicImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push goal_dim
 	push rows
 	call allocateMatrix
-	add esp, 8
 	push eax
 	push eax
 	push goal_dim
 	push rows
 	call fillOrtographicProjectionMatrixImplementation	; generate projection matrix
-	add esp, 12
 	pop eax
 
 	push eax
@@ -243,12 +234,10 @@ projectOrtographicImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push goal_dim
 	push rows
 	call multiplyMatrixImplementation					; perform projection
-	add esp, 28
 	pop eax
 
 	push eax
 	call deallocateMatrix
-	add esp, 4
 	ret
 projectOrtographicImplementation endp
 ; -------------------------------------------------------------------------------
@@ -260,13 +249,11 @@ projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push goal_dim
 	push rows
 	call allocateMatrix
-	add esp, 8
 	push eax
 	push eax
 	push goal_dim
 	push rows
 	call fillOrtographicProjectionMatrixImplementation	; generate default projection matrix
-	add esp, 12
 
 	push 1
 	push 0
@@ -288,7 +275,6 @@ projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push goal_dim
 	push rows
 	call scaleMatrixImplementation						; scale by perspective
-	add esp, 20
 	
 	pop eax
 	push eax
@@ -301,12 +287,11 @@ projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push goal_dim
 	push rows
 	call multiplyMatrixImplementation					; perform projection
-	add esp, 28
+
 	pop eax
 
 	push eax
 	call deallocateMatrix
-	add esp, 4
 	ret
 projectPerspectiveImplementation endp
 ; -------------------------------------------------------------------------------
@@ -318,7 +303,6 @@ fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angl
 	push rows
 	push cols
 	call fillIdentityMatrixImplementation			; prepare matrix
-	add esp, 12
 
 	push cols
 	push axis1
@@ -328,7 +312,7 @@ fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angl
 	add eax, arr
 	fld angle
 	fcos
-	fstp REAL8 PTR [eax]								; write cos(angle)
+	fstp REAL8 PTR [eax]							; write cos(angle)
 	movsd xmm0, REAL8 PTR [eax]
 
 	push cols
@@ -349,7 +333,7 @@ fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angl
 	movsd REAL8 PTR [eax], xmm0
 	fld angle
 	fsin
-	fstp REAL8 PTR [eax]								; write sin(angle)
+	fstp REAL8 PTR [eax]							; write sin(angle)
 	movsd xmm0, REAL8 PTR [eax]
 
 	push cols
@@ -373,7 +357,6 @@ rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, a
 	push rows
 	push rows
 	call allocateMatrix
-	add esp, 8
 	push eax											; allocate rotation matrix
 
 	movsd xmm0, angle
@@ -397,12 +380,10 @@ rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, a
 	push rows
 	push rows
 	call multiplyMatrixImplementation					; performing rotation
-	add esp, 28
 
 	pop eax
 	push eax
 	call deallocateMatrix
-	add esp, 4
 	ret
 rotateImplementation endp
 ; -------------------------------------------------------------------------------
@@ -414,7 +395,6 @@ fillDoubleRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD
 	push rows
 	push cols
 	call fillIdentityMatrixImplementation			; prepare matrix
-	add esp, 12
 
 	push cols
 	push 0
@@ -424,7 +404,7 @@ fillDoubleRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD
 	add eax, arr
 	fld angle
 	fcos
-	fstp REAL8 PTR [eax]								; write cos(angle)
+	fstp REAL8 PTR [eax]							; write cos(angle)
 	movsd xmm0, REAL8 PTR [eax]
 
 	push cols
@@ -495,14 +475,12 @@ fillDoubleRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD
 fillDoubleRotationMatrixImplementation endp
 ; -------------------------------------------------------------------------------
 
-
 ; double rotation implrmrntation only
 ; -------------------------------------------------------------------------------
 rotateWImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, angle: REAL8
 	push rows
 	push rows
 	call allocateMatrix
-	add esp, 8
 	push eax											; allocate rotation matrix
 
 	movsd xmm0, angle
@@ -524,24 +502,12 @@ rotateWImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, 
 	push rows
 	push rows
 	call multiplyMatrixImplementation					; performing rotation
-	add esp, 28
 
 	pop eax
 	push eax
 	call deallocateMatrix
-	add esp, 4
 	ret
 rotateWImplementation endp
 ; -------------------------------------------------------------------------------
-
-
-
-extern malloc:proc
-extern free:proc
-testIMP proc i: DWORD
-	push i
-	call malloc
-	ret
-testIMP endp
 
 end
