@@ -54,6 +54,23 @@ void Canvas::draw2dMesh(Mesh2d hedron)
 	}
 }
 
+void Canvas::drawFps(double fps)
+{
+	float text_size = 15;
+	sf::Font font;
+	if (!font.loadFromFile("D:\\Studia\\SEM5\\ja\\Projekt\\Projector4d\\Debug\\arial.ttf"))
+	{
+		return;
+	}
+	sf::Text text;
+	text.setFont(font);
+	text.setString("fps: " + std::to_string(fps));
+	text.setCharacterSize(text_size);
+	text.setFillColor(sf::Color::White);
+	text.setPosition(0.0f, height_ - text_size);
+	draw(text);
+}
+
 float Canvas::scaleWidth(double x)
 // accepts parameter in range <-1,1>, returns in range <0,width>
 {
