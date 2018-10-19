@@ -37,7 +37,7 @@ calculateMatrixIndex endp
 
 ; -------------------------------------------------------------------------------
 ; scales array of doubles of given size in place
-scaleMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, scale: REAL8
+scaleMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, scale: REAL8
 	mov ebx, 0							; initialize row index
 rowloop:
 	cmp ebx, rows						; if row index == number of rows
@@ -64,12 +64,12 @@ rowloopend:
 	jmp rowloop
 finished:
 	ret 20								; inner function, clear stack
-scaleMatrixImplementation endp
+scaleMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
 ; multiplies two matrices, assumes given output array is correct size
-multiplyMatrixImplementation proc cols1: DWORD, rows1: DWORD, arr1: DWORD, cols2: DWORD, rows2: DWORD, arr2: DWORD, outarr: DWORD
+multiplyMatrix proc cols1: DWORD, rows1: DWORD, arr1: DWORD, cols2: DWORD, rows2: DWORD, arr2: DWORD, outarr: DWORD
 	mov ebx, 0							; initialize row index (iterates over rows of output mat)
 rowloop:
 	cmp ebx, rows1						; new matrix has same rows as first mat
@@ -119,7 +119,7 @@ rowloopend:
 	jmp rowloop
 finished:
 	ret 28								; clear stack, inner function
-multiplyMatrixImplementation endp
+multiplyMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
@@ -129,14 +129,14 @@ fillZerosMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
 	push arr
 	push rows
 	push cols
-	call scaleMatrixImplementation		; scale by 0
+	call scaleMatrix		; scale by 0
 	ret 12								; clear stack
 fillZerosMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
 ; fills given matrix with identity matrix
-fillIdentityMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD
+fillIdentityMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
 	push arr
 	push rows
 	push cols
@@ -157,12 +157,12 @@ dataloop:
 	jmp dataloop
 finished:
 	ret 12
-fillIdentityMatrixImplementation endp
+fillIdentityMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
 ; fills given matrix with projection matrix
-fillOrtographicProjectionMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD
+fillOrtographicProjectionMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
 	push arr
 	push rows
 	push cols
@@ -187,7 +187,7 @@ dataloop:
 	jmp dataloop
 finished:
 	ret 12
-fillOrtographicProjectionMatrixImplementation endp
+fillOrtographicProjectionMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
@@ -222,7 +222,7 @@ projectOrtographicImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push eax
 	push goal_dim
 	push rows
-	call fillOrtographicProjectionMatrixImplementation	; generate projection matrix
+	call fillOrtographicProjectionMatrix	; generate projection matrix
 	pop eax
 
 	push eax
@@ -233,7 +233,7 @@ projectOrtographicImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push eax
 	push goal_dim
 	push rows
-	call multiplyMatrixImplementation					; perform projection
+	call multiplyMatrix					; perform projection
 	pop eax
 
 	push eax
@@ -253,7 +253,7 @@ projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push eax
 	push goal_dim
 	push rows
-	call fillOrtographicProjectionMatrixImplementation	; generate default projection matrix
+	call fillOrtographicProjectionMatrix	; generate default projection matrix
 
 	push 1
 	push 0
@@ -274,7 +274,7 @@ projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push eax
 	push goal_dim
 	push rows
-	call scaleMatrixImplementation						; scale by perspective
+	call scaleMatrix						; scale by perspective
 	
 	pop eax
 	push eax
@@ -286,7 +286,7 @@ projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 	push eax
 	push goal_dim
 	push rows
-	call multiplyMatrixImplementation					; perform projection
+	call multiplyMatrix					; perform projection
 
 	pop eax
 
@@ -298,11 +298,11 @@ projectPerspectiveImplementation endp
 
 ; fills rotation matrix, which rotates specified axis
 ; -------------------------------------------------------------------------------
-fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8, axis1: DWORD, axis2: DWORD
+fillRotationMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8, axis1: DWORD, axis2: DWORD
 	push arr
 	push rows
 	push cols
-	call fillIdentityMatrixImplementation			; prepare matrix
+	call fillIdentityMatrix			; prepare matrix
 
 	push cols
 	push axis1
@@ -347,7 +347,7 @@ fillRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angl
 	subsd xmm0, xmm1
 	movsd REAL8 PTR [eax], xmm0						; write -sin(angle)
 	ret
-fillRotationMatrixImplementation endp
+fillRotationMatrix endp
 ; -------------------------------------------------------------------------------
 
 
@@ -367,7 +367,7 @@ rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, a
 	push eax
 	push rows
 	push rows
-	call fillRotationMatrixImplementation				; filling rotation matrix
+	call fillRotationMatrix				; filling rotation matrix
 	add esp, 28
 	pop eax
 	push eax
@@ -379,7 +379,7 @@ rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, a
 	push eax
 	push rows
 	push rows
-	call multiplyMatrixImplementation					; performing rotation
+	call multiplyMatrix					; performing rotation
 
 	pop eax
 	push eax
@@ -390,11 +390,11 @@ rotateImplementation endp
 
 ; fills double rotation matrix
 ; -------------------------------------------------------------------------------
-fillDoubleRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8
+fillDoubleRotationMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8
 	push arr
 	push rows
 	push cols
-	call fillIdentityMatrixImplementation			; prepare matrix
+	call fillIdentityMatrix			; prepare matrix
 
 	push cols
 	push 0
@@ -472,7 +472,7 @@ fillDoubleRotationMatrixImplementation proc cols: DWORD, rows: DWORD, arr: DWORD
 	movsd REAL8 PTR [eax], xmm0
 
 	ret
-fillDoubleRotationMatrixImplementation endp
+fillDoubleRotationMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; double rotation implrmrntation only
@@ -489,7 +489,7 @@ rotateWImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, 
 	push eax
 	push rows
 	push rows
-	call fillDoubleRotationMatrixImplementation			; filling rotation matrix
+	call fillDoubleRotationMatrix			; filling rotation matrix
 	add esp, 20
 	pop eax
 	push eax
@@ -501,7 +501,7 @@ rotateWImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, 
 	push eax
 	push rows
 	push rows
-	call multiplyMatrixImplementation					; performing rotation
+	call multiplyMatrix					; performing rotation
 
 	pop eax
 	push eax

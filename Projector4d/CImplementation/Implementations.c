@@ -14,7 +14,7 @@ int calculateMatrixIndex(int col_index, int row_index, int cols) {
 }
 
 // scales array of doubles of given size in place
-void scaleMatrixImplementation(int cols, int rows, double* arr, double scale) {
+void scaleMatrix(int cols, int rows, double* arr, double scale) {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			arr[calculateMatrixIndex(j, i, cols)] *= scale;
@@ -23,7 +23,7 @@ void scaleMatrixImplementation(int cols, int rows, double* arr, double scale) {
 }
 
 // multiplies two matrices, assumes given output array is correct size
-void multiplyMatrixImplementation(int cols1, int rows1, double* arr1, int cols2, int rows2, double* arr2, double* outarr) {
+void multiplyMatrix(int cols1, int rows1, double* arr1, int cols2, int rows2, double* arr2, double* outarr) {
 	for (int i = 0; i < rows1; i++) {
 		for (int j = 0; j < cols2; j++) {
 			double sum = 0.0;
@@ -37,11 +37,11 @@ void multiplyMatrixImplementation(int cols1, int rows1, double* arr1, int cols2,
 
 // fills given matrix with zeros
 void fillZerosMatrix(int cols, int rows, double* arr) {
-	scaleMatrixImplementation(cols, rows, arr, 0.0);
+	scaleMatrix(cols, rows, arr, 0.0);
 }
 
 // fills given matrix with identity matrix
-void fillIdentityMatrixImplementation(int cols, int rows, double* arr) {
+void fillIdentityMatrix(int cols, int rows, double* arr) {
 	fillZerosMatrix(cols, rows, arr);
 	for (int i = 0; i < cols; i++) {
 		arr[calculateMatrixIndex(i, i, cols)] = 1.0;
@@ -49,7 +49,7 @@ void fillIdentityMatrixImplementation(int cols, int rows, double* arr) {
 }
 
 // fills given matrix with projection matrix
-void fillOrtographicProjectionMatrixImplementation(int cols, int rows, double* arr) {
+void fillOrtographicProjectionMatrix(int cols, int rows, double* arr) {
 	fillZerosMatrix(cols, rows, arr);
 	int smaller_dim = min(cols, rows);
 	for (int i = 0; i < smaller_dim; i++) {
@@ -71,9 +71,9 @@ void deallocateMatrix(double* arr) {
 void projectOrtographicImplementation(int cols, int rows, double* arr, double* outarr, int goal_dim) {
 	// get projection matrix
 	double* projection_matrix = allocateMatrix(rows, goal_dim);
-	fillOrtographicProjectionMatrixImplementation(rows, goal_dim, projection_matrix);
+	fillOrtographicProjectionMatrix(rows, goal_dim, projection_matrix);
 	// perform projection
-	multiplyMatrixImplementation(rows, goal_dim, projection_matrix, cols, rows, arr, outarr);
+	multiplyMatrix(rows, goal_dim, projection_matrix, cols, rows, arr, outarr);
 	// deallocate
 	deallocateMatrix(projection_matrix);
 }
@@ -82,21 +82,21 @@ void projectOrtographicImplementation(int cols, int rows, double* arr, double* o
 void projectPerspectiveImplementation(int cols, int rows, double* arr, double* outarr, int goal_dim, double distance) {
 	// get projection matrix
 	double* projection_matrix = allocateMatrix(rows, goal_dim);
-	fillOrtographicProjectionMatrixImplementation(rows, goal_dim, projection_matrix);
+	fillOrtographicProjectionMatrix(rows, goal_dim, projection_matrix);
 	// calculate perspective scale
 	double sliced_coordinate = arr[calculateMatrixIndex(goal_dim, 0, 1)];
 	double perspective_scaler = 1.0 / (sliced_coordinate - distance);
 	// apply scale to projection matrix
-	scaleMatrixImplementation(rows, goal_dim, projection_matrix, perspective_scaler);
+	scaleMatrix(rows, goal_dim, projection_matrix, perspective_scaler);
 	// perform projection
-	multiplyMatrixImplementation(rows, goal_dim, projection_matrix, cols, rows, arr, outarr);
+	multiplyMatrix(rows, goal_dim, projection_matrix, cols, rows, arr, outarr);
 	// deallocate
 	deallocateMatrix(projection_matrix);
 }
 
 // fills rotation matrix, which rotates specified axis
-void fillRotationMatrixImplementation(int cols, int rows, double* arr, double angle, int axis1, int axis2) {
-	fillIdentityMatrixImplementation(cols, rows, arr);
+void fillRotationMatrix(int cols, int rows, double* arr, double angle, int axis1, int axis2) {
+	fillIdentityMatrix(cols, rows, arr);
 	double cos_angle = cos(angle);
 	double sin_angle = sin(angle);
 	arr[calculateMatrixIndex(axis1, axis1, cols)] = cos_angle;
@@ -109,16 +109,16 @@ void fillRotationMatrixImplementation(int cols, int rows, double* arr, double an
 void rotateImplementation(int cols, int rows, double* arr, double* outarr, double angle, int axis0, int axis1) {
 	// get rotation matrix
 	double* rotation_matrix = allocateMatrix(rows, rows);
-	fillRotationMatrixImplementation(rows, rows, rotation_matrix, angle, axis0, axis1);
+	fillRotationMatrix(rows, rows, rotation_matrix, angle, axis0, axis1);
 	// perform rotation
-	multiplyMatrixImplementation(rows, rows, rotation_matrix, cols, rows, arr, outarr);
+	multiplyMatrix(rows, rows, rotation_matrix, cols, rows, arr, outarr);
 	// deallocate
 	deallocateMatrix(rotation_matrix);
 }
 
 // fills double rotation matrix, assumess given matrix is 4x4
-void fillDoubleRotationMatrixImplementation(int cols, int rows, double* arr, double angle) {
-	fillIdentityMatrixImplementation(cols, rows, arr);
+void fillDoubleRotationMatrix(int cols, int rows, double* arr, double angle) {
+	fillIdentityMatrix(cols, rows, arr);
 	double cos_angle = cos(angle);
 	double sin_angle = sin(angle);
 	arr[calculateMatrixIndex(0, 0, cols)] = cos_angle;
@@ -135,9 +135,9 @@ void fillDoubleRotationMatrixImplementation(int cols, int rows, double* arr, dou
 void rotateWImplementation(int cols, int rows, double* arr, double* outarr, double angle) {
 	// get rotation matrix
 	double* rotation_matrix = allocateMatrix(rows, rows);
-	fillDoubleRotationMatrixImplementation(rows, rows, rotation_matrix, angle);
+	fillDoubleRotationMatrix(rows, rows, rotation_matrix, angle);
 	// perform rotation
-	multiplyMatrixImplementation(rows, rows, rotation_matrix, cols, rows, arr, outarr);
+	multiplyMatrix(rows, rows, rotation_matrix, cols, rows, arr, outarr);
 	// deallocate
 	deallocateMatrix(rotation_matrix);
 }
