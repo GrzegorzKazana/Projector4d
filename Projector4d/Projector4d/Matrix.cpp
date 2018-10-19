@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iostream>
 #include "Exceptions.h"
-#include "ProjectionFunctionsDll.h"
 
 inline unsigned int index(unsigned int y, unsigned int x, unsigned int width) {
 	return y * width + x;
@@ -140,7 +139,7 @@ bool Matrix::operator==(const Matrix & other)
 		return false;
 	}
 	for (unsigned int i = 0; i < rows*cols; i++) {
-		std::cout << data[i] << "	" << other.data[i] << std::endl;
+		//std::cout << data[i] << "	" << other.data[i] << std::endl;
 		if (abs(data[i] - other.data[i]) >= std::numeric_limits<float>::epsilon()) {
 			return false;
 		}
