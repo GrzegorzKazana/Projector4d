@@ -32,7 +32,7 @@ Mesh2d IGraphicsEngine::project2dPerspective(Mesh3d hedron, double distance) con
 {
 	std::vector<Vector2d> res;
 	for (Vector3d p : hedron.getVertices()) {
-		res.push_back(project2dPerspective(p));
+		res.push_back(project2dPerspective(p, distance));
 	}
 	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
@@ -41,7 +41,7 @@ Mesh2d IGraphicsEngine::project2dPerspective(Mesh4d hedron, double distance) con
 {
 	std::vector<Vector2d> res;
 	for (Vector4d p : hedron.getVertices()) {
-		res.push_back(project2dPerspective(p));
+		res.push_back(project2dPerspective(p, distance));
 	}
 	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
