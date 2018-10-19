@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "AsmGraphicsEngine.h"
-#include "ProjectionFunctions.h"
+#include "AsmProjectionFunctions.h"
 
 AsmGraphicsEngine::AsmGraphicsEngine()
 {
