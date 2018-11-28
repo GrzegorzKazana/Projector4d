@@ -18,6 +18,9 @@ Matrix::Matrix(unsigned int _rows, unsigned int _cols)
 {
 	//initialize data table
 	data = new double[rows*cols];
+	for (int i = 0; i < rows*cols; i++) {
+		data[i] = 0;
+	}
 }
 
 Matrix::Matrix(unsigned int _rows, unsigned int _cols, double _default_val)

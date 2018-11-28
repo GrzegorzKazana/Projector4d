@@ -116,8 +116,8 @@ std::vector<Vector4d> Mesh4d::getVertices()
 
 Mesh4d::Mesh4d(std::vector<Vector4d> vets, std::vector<std::pair<unsigned int, unsigned int>> edges)
 {
-	vertix_n = 8;
-	edge_n = 12;
+	vertix_n = 16;
+	edge_n = 32;
 	vertices = vets;
 	edge_idx = edges;
 }

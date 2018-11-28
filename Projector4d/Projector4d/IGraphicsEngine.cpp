@@ -6,6 +6,7 @@
 #include "stdafx.h"
 #include "IGraphicsEngine.h"
 
+
 Mesh2d IGraphicsEngine::project2dOrtographic(Mesh3d hedron) const
 {
 	std::vector<Vector2d> res;
@@ -94,15 +95,6 @@ Mesh3d IGraphicsEngine::rotateZ(Mesh3d hedron, double angle) const
 		res.push_back(rotateZ(p, angle));
 	}
 	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
-}
-
-Mesh4d IGraphicsEngine::rotateYZ(Mesh4d hedron, double angle) const
-{
-	std::vector<Vector4d> res;
-	for (Vector4d p : hedron.getVertices()) {
-		res.push_back(rotateYZ(p, angle));
-	}
-	return Mesh4d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
 Mesh4d IGraphicsEngine::rotateW(Mesh4d hedron, double angle) const

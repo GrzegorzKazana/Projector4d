@@ -3,7 +3,7 @@
 ;Jêzyki Asemblerowe 2018-2019
 
 .model flat, c
-includelib   msvcrtd
+;includelib   msvcrtd
 .data
 DOUBLE_SIZE BYTE 8						; holds double size (bytes) constant
 ZERO REAL8 0.0							; holds double fp 0.0 constant
@@ -20,7 +20,7 @@ extern free:proc
 ;	b: DWORD, second number
 ; returns:
 ;	DWORD, smaller number from parameters 
-; uses registers:
+; modifies registers:
 ;	EAX
 ; decription:
 ;	picks smaller number
@@ -47,7 +47,7 @@ min endp
 ; returns:
 ;	DWORD, 1d array index, as if it was a matrix
 ;	uses formula (row_index*cols+col_index)
-; uses registers:
+; modifies registers:
 ;	EAX, EDX
 ; decription:
 ;	use this function when matrix is indexed by two indexes, and array is 1d
@@ -69,12 +69,13 @@ calculateMatrixIndex endp
 ;	scale: double, value scaling the matrix
 ; returns:
 ;	none
-; uses registers:
-;	EAX, EBX, ECX, EDX, XMM0
+; modifies registers:
+;	EAX, ECX, EDX, XMM0
 ; decription:
 ;	scales array of doubles of given size in place
 ; -------------------------------------------------------------------------------
 scaleMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, scale: REAL8
+	push ebx
 	mov ebx, 0							; initialize row index
 rowloop:
 	cmp ebx, rows						; if row index == number of rows
@@ -100,6 +101,7 @@ rowloopend:
 	add ebx, 1							; increment idx
 	jmp rowloop
 finished:
+	pop ebx
 	ret 20								; inner function, clear stack
 scaleMatrix endp
 ; -------------------------------------------------------------------------------
@@ -116,12 +118,13 @@ scaleMatrix endp
 ;	outarr: DWORD, adress of output array
 ; returns:
 ;	none
-; uses registers:
-;	EAX, EBX, ECX, EDX, XMM0, XMM1
+; modifies registers:
+;	EAX, ECX, EDX, XMM0, XMM1
 ; decription:
 ;	multiplies two matrices, assumes given output array is correct size
 ; -------------------------------------------------------------------------------
 multiplyMatrix proc cols1: DWORD, rows1: DWORD, arr1: DWORD, cols2: DWORD, rows2: DWORD, arr2: DWORD, outarr: DWORD
+	push ebx
 	mov ebx, 0							; initialize row index (iterates over rows of output mat)
 rowloop:
 	cmp ebx, rows1						; new matrix has same rows as first mat
@@ -170,6 +173,7 @@ rowloopend:
 	add ebx, 1							; increment idx
 	jmp rowloop
 finished:
+	pop ebx
 	ret 28								; clear stack, inner function
 multiplyMatrix endp
 ; -------------------------------------------------------------------------------
@@ -182,17 +186,38 @@ multiplyMatrix endp
 ;	arr: DWORD, address of matrix
 ; returns:
 ;	none
-; uses registers:
-;	EAX, EBX, ECX, XMM0
+; modifies registers:
+;	EAX, ECX, XMM0
 ; decription:
 ;	fills given matrix with zeros, by scaling it by 0
 ; -------------------------------------------------------------------------------
 fillZerosMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
-	push 00000000h
-	push arr
-	push rows
+	push ebx
+	movsd xmm0, [ZERO]
+	mov ebx, 0							; initialize row index
+rowloop:
+	cmp ebx, rows						; if row index == number of rows
+	je finished							; loop is ended
+	mov ecx, 0							; initialize column index
+colloop:
+	cmp ecx, cols						; if col index == number of cols
+	je rowloopend						; move to next row
+	push edx
 	push cols
-	call scaleMatrix		; scale by 0
+	push ebx
+	push ecx
+	call calculateMatrixIndex			; calc flattened 1d array index
+	pop edx
+	mul [DOUBLE_SIZE]					; calc offset in bytes
+	add eax, arr						; add pointer to first element to offset
+	movsd REAL8 PTR [eax], xmm0			; push back to array
+	add ecx, 1							; increment idx
+	jmp colloop
+rowloopend:
+	add ebx, 1							; increment idx
+	jmp rowloop
+finished:
+	pop ebx
 	ret 12								; clear stack
 fillZerosMatrix endp
 ; -------------------------------------------------------------------------------
@@ -205,12 +230,13 @@ fillZerosMatrix endp
 ;	arr: DWORD, address of matrix
 ; returns:
 ;	none
-; uses registers:
-;	EAX, EBX, ECX, EDX, XMM0
+; modifies registers:
+;	EAX, ECX, EDX, XMM0
 ; decription:
 ;	fills given matrix with identity matrix
 ; -------------------------------------------------------------------------------
 fillIdentityMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
+	push ebx
 	push arr
 	push rows
 	push cols
@@ -230,6 +256,7 @@ dataloop:
 	add ebx, 1
 	jmp dataloop
 finished:
+	pop ebx
 	ret 12
 fillIdentityMatrix endp
 ; -------------------------------------------------------------------------------
@@ -242,12 +269,13 @@ fillIdentityMatrix endp
 ;	arr: DWORD, address of matrix
 ; returns:
 ;	none
-; uses registers:
-;	EAX, EBX, ECX, EDX, XMM0
+; modifies registers:
+;	EAX, ECX, EDX, XMM0
 ; decription:
 ;	fills given matrix with projection matrix
 ; -------------------------------------------------------------------------------
 fillOrtographicProjectionMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
+	push ebx
 	push arr
 	push rows
 	push cols
@@ -271,6 +299,7 @@ dataloop:
 	add ebx, 1
 	jmp dataloop
 finished:
+	pop ebx
 	ret 12
 fillOrtographicProjectionMatrix endp
 ; -------------------------------------------------------------------------------
@@ -282,7 +311,7 @@ fillOrtographicProjectionMatrix endp
 ;	rows: DWORD, number of rows in matrix
 ; returns:
 ;	DWORD, address of matrix
-; uses registers:
+; modifies registers:
 ;	EAX, ECX, EDX, XMM0
 ; decription:
 ;	allocate matrix
@@ -304,7 +333,7 @@ allocateMatrix endp
 ;	arr: DWORD, adress to array
 ; returns:
 ;	none
-; uses registers:
+; modifies registers:
 ;	EAX, ECX, EDX, XMM0
 ; decription:
 ;	free matrix
@@ -326,7 +355,7 @@ deallocateMatrix endp
 ;	goal_dim: DWORD, output dimention
 ; returns:
 ;	none
-; uses registers:
+; modifies registers:
 ;	EAX, EBX, ECX, EDX, XMM0, XMM1
 ; decription:
 ;	projects matrix to specified dimension without perspective
@@ -370,7 +399,7 @@ projectOrtographicImplementation endp
 ;	distance: REAL8, distance from 'camera' to objects
 ; returns:
 ;	none
-; uses registers:
+; modifies registers:
 ;	EAX, EBX, ECX, EDX, XMM0, XMM1
 ; decription:
 ;	project matrix with perspective
@@ -437,7 +466,7 @@ projectPerspectiveImplementation endp
 ;	axis2: DWORD, second axis modified by rotation
 ; returns:
 ;	none
-; uses registers:
+; modifies registers:
 ;	EAX, EBX, ECX, EDX, XMM0, XMM1, ST7, MM7
 ; decription:
 ;	fills rotation matrix
@@ -506,7 +535,7 @@ fillRotationMatrix endp
 ;	axis2: DWORD, second axis modified by rotation
 ; returns:
 ;	none
-; uses registers:
+; modifies registers:
 ;	EAX, EBX, ECX, EDX, XMM0, ST7, MM7
 ; decription:
 ;	rotates vector by specified angle
@@ -555,7 +584,7 @@ rotateImplementation endp
 ;	angle: REAL8, angle of rotation
 ; returns:
 ;	none
-; uses registers:
+; modifies registers:
 ;	EAX, EBX, ECX, EDX, XMM0, ST7, MM7
 ; decription:
 ;	fills double rotation matrix
@@ -655,7 +684,7 @@ fillDoubleRotationMatrix endp
 ;	angle: REAL8, angle of rotation
 ; returns:
 ;	none
-; uses registers:
+; modifies registers:
 ;	EAX, EBX, ECX, EDX, XMM0, ST7, MM7
 ; decription:
 ;	double rotation implrmrntation only

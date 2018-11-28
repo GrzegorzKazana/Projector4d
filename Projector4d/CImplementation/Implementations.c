@@ -42,7 +42,9 @@ void multiplyMatrix(int cols1, int rows1, double* arr1, int cols2, int rows2, do
 
 // fills given matrix with zeros
 void fillZerosMatrix(int cols, int rows, double* arr) {
-	scaleMatrix(cols, rows, arr, 0.0);
+	for (int i = 0; i< cols*rows; i++) {
+		arr[i] = 0.0;
+	}
 }
 
 // fills given matrix with identity matrix
