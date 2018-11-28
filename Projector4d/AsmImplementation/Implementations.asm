@@ -1,3 +1,7 @@
+;Author: Grzegorz Kazana
+;Date: 28-11-2018
+;Jêzyki Asemblerowe 2018-2019
+
 .model flat, c
 includelib   msvcrtd
 .data

@@ -1,3 +1,8 @@
+/*
+*Author: Grzegorz Kazana
+*Date: 28-11-2018
+*Jêzyki Asemblerowe 2018-2019
+*/
 #include "stdafx.h"
 #include "Vectors.h"
 #include "Exceptions.h"
