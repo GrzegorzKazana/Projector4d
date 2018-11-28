@@ -1,20 +1,29 @@
 .model flat, c
 includelib   msvcrtd
 .data
-DOUBLE_SIZE BYTE 8
-ZERO REAL8 0.0
-ONE REAL8 1.0
+DOUBLE_SIZE BYTE 8						; holds double size (bytes) constant
+ZERO REAL8 0.0							; holds double fp 0.0 constant
+ONE REAL8 1.0							; holds double fp 1.0 constant
 .code 
 
 extern malloc:proc
 extern free:proc
 
 ; -------------------------------------------------------------------------------
-; picks smaller number
+; name: min
+; parameters: 
+;	a: DWORD, first number
+;	b: DWORD, second number
+; returns:
+;	DWORD, smaller number from parameters 
+; uses registers:
+;	EAX
+; decription:
+;	picks smaller number
+; -------------------------------------------------------------------------------
 min proc a: DWORD, b: DWORD
 	mov eax, a
 	sub eax, b
-	test eax, eax
 	js isnegative
 	mov eax, b
 	jmp finished
@@ -26,7 +35,19 @@ min endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; use this function when matrix is indexed by two indexes, and array is 1d
+; name: calculateMatrixIndex
+; parameters: 
+;	col_index: DWORD, matrix column index
+;	row_index: DWORD, matrix
+;	cols: DWORD, number of columns in matrix
+; returns:
+;	DWORD, 1d array index, as if it was a matrix
+;	uses formula (row_index*cols+col_index)
+; uses registers:
+;	EAX, EDX
+; decription:
+;	use this function when matrix is indexed by two indexes, and array is 1d
+; -------------------------------------------------------------------------------
 calculateMatrixIndex proc col_index: DWORD, row_index: DWORD, cols: DWORD
 	mov eax, row_index
 	mul cols
@@ -36,7 +57,19 @@ calculateMatrixIndex endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; scales array of doubles of given size in place
+; name: scaleMatrix
+; parameters: 
+;	cols: integer, number of cols of matrix
+;	rows: integer, number of rows of matrix
+;	arr: 32bit, adress to double array
+;	scale: double, value scaling the matrix
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0
+; decription:
+;	scales array of doubles of given size in place
+; -------------------------------------------------------------------------------
 scaleMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, scale: REAL8
 	mov ebx, 0							; initialize row index
 rowloop:
@@ -68,7 +101,22 @@ scaleMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; multiplies two matrices, assumes given output array is correct size
+; name: multiplyMatrix
+; parameters: 
+;	cols1: DWORD, number of columns in first matrix
+;	rows1: DWORD, number of rows in first matrix
+;	arr1: DWORD, adress of first array
+;	cols2: DWORD, number of columns in second matrix
+;	rows2: DWORD, number of columns in second matrix
+;	arr2: DWORD, adress of second array
+;	outarr: DWORD, adress of output array
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0, XMM1
+; decription:
+;	multiplies two matrices, assumes given output array is correct size
+; -------------------------------------------------------------------------------
 multiplyMatrix proc cols1: DWORD, rows1: DWORD, arr1: DWORD, cols2: DWORD, rows2: DWORD, arr2: DWORD, outarr: DWORD
 	mov ebx, 0							; initialize row index (iterates over rows of output mat)
 rowloop:
@@ -123,7 +171,18 @@ multiplyMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; fills given matrix with zeros
+; name: fillZerosMatrix
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address of matrix
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, XMM0
+; decription:
+;	fills given matrix with zeros, by scaling it by 0
+; -------------------------------------------------------------------------------
 fillZerosMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
 	push 00000000h
 	push arr
@@ -135,7 +194,18 @@ fillZerosMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; fills given matrix with identity matrix
+; name: fillIdentityMatrix
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address of matrix
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0
+; decription:
+;	fills given matrix with identity matrix
+; -------------------------------------------------------------------------------
 fillIdentityMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
 	push arr
 	push rows
@@ -161,7 +231,18 @@ fillIdentityMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; fills given matrix with projection matrix
+; name: fillOrtographicProjectionMatrix
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address of matrix
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0
+; decription:
+;	fills given matrix with projection matrix
+; -------------------------------------------------------------------------------
 fillOrtographicProjectionMatrix proc cols: DWORD, rows: DWORD, arr: DWORD
 	push arr
 	push rows
@@ -191,7 +272,17 @@ fillOrtographicProjectionMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; allocate matrix
+; name: allocateMatrix
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+; returns:
+;	DWORD, address of matrix
+; uses registers:
+;	EAX, ECX, EDX, XMM0
+; decription:
+;	allocate matrix
+; -------------------------------------------------------------------------------
 allocateMatrix proc cols: DWORD, rows: DWORD
 	mov eax, 1
 	mul [DOUBLE_SIZE]
@@ -204,7 +295,16 @@ allocateMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; free matrix
+; name: deallocateMatrix
+; parameters: 
+;	arr: DWORD, adress to array
+; returns:
+;	none
+; uses registers:
+;	EAX, ECX, EDX, XMM0
+; decription:
+;	free matrix
+; -------------------------------------------------------------------------------
 deallocateMatrix proc arr: DWORD
 	push arr
 	call free
@@ -213,7 +313,20 @@ deallocateMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
-; project matrix (outarr has dimensions: cols x 2)
+; name: projectOrtographicImplementation
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	outarr: DWORD, address to output matrix
+;	goal_dim: DWORD, output dimention
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0, XMM1
+; decription:
+;	projects matrix to specified dimension without perspective
+; -------------------------------------------------------------------------------
 projectOrtographicImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, goal_dim: DWORD
 	push goal_dim
 	push rows
@@ -242,9 +355,22 @@ projectOrtographicImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 projectOrtographicImplementation endp
 ; -------------------------------------------------------------------------------
 
-
 ; -------------------------------------------------------------------------------
-; project matrix (arr has dimentions 1 x 3, outarr has dimensions: 1 x 2)
+; name: projectPerspectiveImplementation
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	outarr: DWORD, address to output matrix
+;	goal_dim: DWORD, output dimention
+;	distance: REAL8, distance from 'camera' to objects
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0, XMM1
+; decription:
+;	project matrix with perspective
+; -------------------------------------------------------------------------------
 projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, goal_dim: DWORD, distance: REAL8
 	push goal_dim
 	push rows
@@ -296,7 +422,21 @@ projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outa
 projectPerspectiveImplementation endp
 ; -------------------------------------------------------------------------------
 
-; fills rotation matrix, which rotates specified axis
+; -------------------------------------------------------------------------------
+; name: fillRotationMatrix
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	angle: REAL8, angle of rotation
+;	axis1: DWORD, first axis modified by rotation
+;	axis2: DWORD, second axis modified by rotation
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0, XMM1, ST7, MM7
+; decription:
+;	fills rotation matrix
 ; -------------------------------------------------------------------------------
 fillRotationMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8, axis1: DWORD, axis2: DWORD
 	push arr
@@ -350,8 +490,22 @@ fillRotationMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8, axis
 fillRotationMatrix endp
 ; -------------------------------------------------------------------------------
 
-
-; rotates vector
+; -------------------------------------------------------------------------------
+; name: rotateImplementation
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	outarr: DWORD, address of output matrix, assuming size is correct - equal to arr size
+;	angle: REAL8, angle of rotation
+;	axis1: DWORD, first axis modified by rotation
+;	axis2: DWORD, second axis modified by rotation
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0, ST7, MM7
+; decription:
+;	rotates vector by specified angle
 ; -------------------------------------------------------------------------------
 rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, angle: REAL8, axis0: DWORD, axis1: DWORD
 	push rows
@@ -388,7 +542,19 @@ rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, a
 rotateImplementation endp
 ; -------------------------------------------------------------------------------
 
-; fills double rotation matrix
+; -------------------------------------------------------------------------------
+; name: fillDoubleRotationMatrix
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	angle: REAL8, angle of rotation
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0, ST7, MM7
+; decription:
+;	fills double rotation matrix
 ; -------------------------------------------------------------------------------
 fillDoubleRotationMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8
 	push arr
@@ -475,7 +641,20 @@ fillDoubleRotationMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8
 fillDoubleRotationMatrix endp
 ; -------------------------------------------------------------------------------
 
-; double rotation implrmrntation only
+; -------------------------------------------------------------------------------
+; name: rotateWImplementation
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	outarr: DWORD, address of output matrix
+;	angle: REAL8, angle of rotation
+; returns:
+;	none
+; uses registers:
+;	EAX, EBX, ECX, EDX, XMM0, ST7, MM7
+; decription:
+;	double rotation implrmrntation only
 ; -------------------------------------------------------------------------------
 rotateWImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, angle: REAL8
 	push rows
@@ -509,5 +688,4 @@ rotateWImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, 
 	ret
 rotateWImplementation endp
 ; -------------------------------------------------------------------------------
-
 end
