@@ -13,6 +13,8 @@ class Canvas: public sf::RenderWindow
 {
 	unsigned int width_ = 0;
 	unsigned int height_ = 0;
+	sf::Font textFont;
+	bool fontLoaded = false;
 public:
 	Canvas(HWND hParent, sf::ContextSettings settings);
 	Canvas(sf::VideoMode size_, sf::ContextSettings settings);

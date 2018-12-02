@@ -4,6 +4,7 @@
 *Jêzyki Asemblerowe 2018-2019
 */
 #include "stdafx.h"
+#include <intrin.h>
 #include "CGraphicsEngine.h"
 #include "CProjectionFunctions.h"
 
@@ -89,7 +90,10 @@ Vector4d CGraphicsEngine::rotateYZ(Vector4d point, double angle) const
 Vector4d CGraphicsEngine::rotateW(Vector4d point, double angle) const
 {
 	Vector4d result;
+	volatile unsigned long int start = __rdtsc();
 	CImplementations::rotateW(point.get_cols(), point.get_rows(), point.data, result.data, angle);
+	volatile unsigned long int end = __rdtsc();
+	volatile unsigned long res = end - start;
 	return result;
 }
 

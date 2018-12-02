@@ -14,6 +14,7 @@ Canvas::Canvas(HWND hParent, sf::ContextSettings settings)
 	sf::Vector2u size = this->getSize();
 	this->width_ = size.x;
 	this->height_ = size.y;
+	this->fontLoaded = this->textFont.loadFromFile("..\\Debug\\arial.ttf");
 }
 
 Canvas::Canvas(sf::VideoMode size_, sf::ContextSettings settings)
@@ -61,14 +62,12 @@ void Canvas::draw2dMesh(Mesh2d hedron)
 
 void Canvas::drawFps(double fps)
 {
-	float text_size = 15;
-	sf::Font font;
-	if (!font.loadFromFile("..\\Debug\\arial.ttf"))
-	{
+	if (!fontLoaded) {
 		return;
 	}
+	float text_size = 15;
 	sf::Text text;
-	text.setFont(font);
+	text.setFont(textFont);
 	text.setString("fps: " + std::to_string(fps));
 	text.setCharacterSize(text_size);
 	text.setFillColor(sf::Color::White);
