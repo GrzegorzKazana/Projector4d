@@ -10,33 +10,34 @@
 
 CGraphicsEngine::CGraphicsEngine()
 {
+	handle = new CImplementations;
 }
 
 Vector2d CGraphicsEngine::project2dOrtographic(Vector3d point) const
 {
 	Vector2d result;
-	CImplementations::project2dOrtographic(point.get_cols(), point.get_rows(), point.data, result.data);
+	handle->project2dOrtographic(point.get_cols(), point.get_rows(), point.data, result.data);
 	return result;
 }
 
 Vector2d CGraphicsEngine::project2dOrtographic(Vector4d point) const
 {
 	Vector2d result;
-	CImplementations::project2dOrtographic(point.get_cols(), point.get_rows(), point.data, result.data);
+	handle->project2dOrtographic(point.get_cols(), point.get_rows(), point.data, result.data);
 	return result;
 }
 
 Vector3d CGraphicsEngine::project3dOrtographic(Vector4d point) const
 {
 	Vector3d result;
-	CImplementations::project3dOrtographic(point.get_cols(), point.get_rows(), point.data, result.data);
+	handle->project3dOrtographic(point.get_cols(), point.get_rows(), point.data, result.data);
 	return result;
 }
 
 Vector2d CGraphicsEngine::project2dPerspective(Vector3d point, double distance) const
 {
 	Vector2d result;
-	CImplementations::project2dPerspective(point.get_cols(), point.get_rows(), point.data, result.data, distance);
+	handle->project2dPerspective(point.get_cols(), point.get_rows(), point.data, result.data, distance);
 	return result;
 }
 
@@ -48,42 +49,35 @@ Vector2d CGraphicsEngine::project2dPerspective(Vector4d point, double distance) 
 Vector3d CGraphicsEngine::project3dPerspective(Vector4d point, double distance) const
 {
 	Vector3d result;
-	CImplementations::project3dPerspective(point.get_cols(), point.get_rows(), point.data, result.data, distance);
+	handle->project3dPerspective(point.get_cols(), point.get_rows(), point.data, result.data, distance);
 	return result;
 }
 
 Vector2d CGraphicsEngine::rotate(Vector2d point, double angle) const
 {
 	Vector2d result;
-	CImplementations::rotate(point.get_cols(), point.get_rows(), point.data, result.data, angle);
+	handle->rotate(point.get_cols(), point.get_rows(), point.data, result.data, angle);
 	return result;
 }
 
 Vector3d CGraphicsEngine::rotateX(Vector3d point, double angle) const
 {
 	Vector3d result;
-	CImplementations::rotateX(point.get_cols(), point.get_rows(), point.data, result.data, angle);
+	handle->rotateX(point.get_cols(), point.get_rows(), point.data, result.data, angle);
 	return result;
 }
 
 Vector3d CGraphicsEngine::rotateY(Vector3d point, double angle) const
 {
 	Vector3d result;
-	CImplementations::rotateY(point.get_cols(), point.get_rows(), point.data, result.data, angle);
+	handle->rotateY(point.get_cols(), point.get_rows(), point.data, result.data, angle);
 	return result;
 }
 
 Vector3d CGraphicsEngine::rotateZ(Vector3d point, double angle) const
 {
 	Vector3d result;
-	CImplementations::rotateZ(point.get_cols(), point.get_rows(), point.data, result.data, angle);
-	return result;
-}
-
-Vector4d CGraphicsEngine::rotateYZ(Vector4d point, double angle) const
-{
-	Vector4d result;
-	CImplementations::rotateYZ(point.get_cols(), point.get_rows(), point.data, result.data, angle);
+	handle->rotateZ(point.get_cols(), point.get_rows(), point.data, result.data, angle);
 	return result;
 }
 
@@ -91,7 +85,7 @@ Vector4d CGraphicsEngine::rotateW(Vector4d point, double angle) const
 {
 	Vector4d result;
 	volatile unsigned long int start = __rdtsc();
-	CImplementations::rotateW(point.get_cols(), point.get_rows(), point.data, result.data, angle);
+	handle->rotateW(point.get_cols(), point.get_rows(), point.data, result.data, angle);
 	volatile unsigned long int end = __rdtsc();
 	volatile unsigned long res = end - start;
 	return result;
@@ -99,4 +93,5 @@ Vector4d CGraphicsEngine::rotateW(Vector4d point, double angle) const
 
 CGraphicsEngine::~CGraphicsEngine()
 {
+	delete handle;
 }

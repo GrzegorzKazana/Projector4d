@@ -8,15 +8,26 @@
 #define DLLIMPORT  __declspec(dllimport)
 #define DLLEXPORT  __declspec(dllexport)
 
-namespace AsmImplementations {
-	void DLLEXPORT project2dOrtographic(unsigned int cols, unsigned int rows, double* arr, double *outarr);
-	void DLLEXPORT project3dOrtographic(unsigned int cols, unsigned int rows, double* arr, double *outarr);
-	void DLLEXPORT project2dPerspective(unsigned int cols, unsigned int rows, double* arr, double *outarr, double distance);
-	void DLLEXPORT project3dPerspective(unsigned int cols, unsigned int rows, double* arr, double *outarr, double distance);
-	void DLLEXPORT rotate(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
-	void DLLEXPORT rotateX(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
-	void DLLEXPORT rotateY(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
-	void DLLEXPORT rotateZ(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
-	void DLLEXPORT rotateYZ(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
-	void DLLEXPORT rotateW(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
-}
+class DLLEXPORT AsmImplementations {
+	double* projection2dOrtographicMatrix;
+	double* projection3dOrtographicMatrix;
+	double* projection2dPerspectiveMatrix;
+	double* projection3dPerspectiveMatrix;
+	double* rotateMatrix;
+	double* rotateXMatrix;
+	double* rotateYMatrix;
+	double* rotateZMatrix;
+	double* rotateWMatrix;
+public:
+	AsmImplementations();
+	void project2dOrtographic(unsigned int cols, unsigned int rows, double* arr, double *outarr);
+	void project3dOrtographic(unsigned int cols, unsigned int rows, double* arr, double *outarr);
+	void project2dPerspective(unsigned int cols, unsigned int rows, double* arr, double *outarr, double distance);
+	void project3dPerspective(unsigned int cols, unsigned int rows, double* arr, double *outarr, double distance);
+	void rotate(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
+	void rotateX(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
+	void rotateY(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
+	void rotateZ(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
+	void rotateW(unsigned int cols, unsigned int rows, double* arr, double* outarr, double angle);
+	~AsmImplementations();
+};

@@ -5,9 +5,11 @@
 */
 #pragma once
 #include "IGraphicsEngine.h"
+#include "AsmProjectionFunctions.h"
 
 class AsmGraphicsEngine :public IGraphicsEngine
 {
+	AsmImplementations* handle;
 public:
 	AsmGraphicsEngine();
 	using IGraphicsEngine::project2dOrtographic;
@@ -18,7 +20,6 @@ public:
 	using IGraphicsEngine::rotateX;
 	using IGraphicsEngine::rotateY;
 	using IGraphicsEngine::rotateZ;
-	using IGraphicsEngine::rotateYZ;
 	using IGraphicsEngine::rotateW;
 	Vector2d project2dOrtographic(Vector3d point) const override;
 	Vector2d project2dOrtographic(Vector4d point) const override;
@@ -30,7 +31,6 @@ public:
 	Vector3d rotateX(Vector3d point, double angle) const override;
 	Vector3d rotateY(Vector3d point, double angle) const override;
 	Vector3d rotateZ(Vector3d point, double angle) const override;
-	Vector4d rotateYZ(Vector4d point, double angle) const override;
 	Vector4d rotateW(Vector4d point, double angle) const override;
 	~AsmGraphicsEngine();
 };
