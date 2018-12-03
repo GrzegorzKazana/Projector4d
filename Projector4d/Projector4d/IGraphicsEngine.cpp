@@ -7,7 +7,7 @@
 #include "IGraphicsEngine.h"
 
 
-Mesh2d IGraphicsEngine::project2dOrtographic(Mesh3d hedron) const
+Mesh2d IGraphicsEngine::project2dOrtographic(Mesh3d hedron)
 {
 	std::vector<Vector2d> res;
 	res.reserve(8);
@@ -17,7 +17,7 @@ Mesh2d IGraphicsEngine::project2dOrtographic(Mesh3d hedron) const
 	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh2d IGraphicsEngine::project2dOrtographic(Mesh4d hedron) const
+Mesh2d IGraphicsEngine::project2dOrtographic(Mesh4d hedron)
 {
 	std::vector<Vector2d> res;
 	res.reserve(16);
@@ -27,7 +27,7 @@ Mesh2d IGraphicsEngine::project2dOrtographic(Mesh4d hedron) const
 	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh3d IGraphicsEngine::project3dOrtographic(Mesh4d hedron) const
+Mesh3d IGraphicsEngine::project3dOrtographic(Mesh4d hedron)
 {
 	std::vector<Vector3d> res;
 	res.reserve(16);
@@ -37,7 +37,7 @@ Mesh3d IGraphicsEngine::project3dOrtographic(Mesh4d hedron) const
 	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh2d IGraphicsEngine::project2dPerspective(Mesh3d hedron, double distance) const
+Mesh2d IGraphicsEngine::project2dPerspective(Mesh3d hedron, double distance)
 {
 	std::vector<Vector2d> res;
 	res.reserve(8);
@@ -47,7 +47,7 @@ Mesh2d IGraphicsEngine::project2dPerspective(Mesh3d hedron, double distance) con
 	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh2d IGraphicsEngine::project2dPerspective(Mesh4d hedron, double distance) const
+Mesh2d IGraphicsEngine::project2dPerspective(Mesh4d hedron, double distance)
 {
 	std::vector<Vector2d> res;
 	res.reserve(16);
@@ -57,7 +57,7 @@ Mesh2d IGraphicsEngine::project2dPerspective(Mesh4d hedron, double distance) con
 	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh3d IGraphicsEngine::project3dPerspective(Mesh4d hedron, double distance) const
+Mesh3d IGraphicsEngine::project3dPerspective(Mesh4d hedron, double distance)
 {
 	std::vector<Vector3d> res;
 	res.reserve(16);
@@ -67,7 +67,7 @@ Mesh3d IGraphicsEngine::project3dPerspective(Mesh4d hedron, double distance) con
 	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh2d IGraphicsEngine::rotate(Mesh2d hedron, double angle) const
+Mesh2d IGraphicsEngine::rotate(Mesh2d hedron, double angle)
 {
 	std::vector<Vector2d> res;
 	res.reserve(4);
@@ -77,7 +77,7 @@ Mesh2d IGraphicsEngine::rotate(Mesh2d hedron, double angle) const
 	return Mesh2d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh3d IGraphicsEngine::rotateX(Mesh3d hedron, double angle) const
+Mesh3d IGraphicsEngine::rotateX(Mesh3d hedron, double angle)
 {
 	std::vector<Vector3d> res;
 	res.reserve(8);
@@ -87,7 +87,7 @@ Mesh3d IGraphicsEngine::rotateX(Mesh3d hedron, double angle) const
 	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh3d IGraphicsEngine::rotateY(Mesh3d hedron, double angle) const
+Mesh3d IGraphicsEngine::rotateY(Mesh3d hedron, double angle)
 {
 	std::vector<Vector3d> res;
 	res.reserve(8);
@@ -97,7 +97,7 @@ Mesh3d IGraphicsEngine::rotateY(Mesh3d hedron, double angle) const
 	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh3d IGraphicsEngine::rotateZ(Mesh3d hedron, double angle) const
+Mesh3d IGraphicsEngine::rotateZ(Mesh3d hedron, double angle)
 {
 	std::vector<Vector3d> res;
 	res.reserve(8);
@@ -107,7 +107,7 @@ Mesh3d IGraphicsEngine::rotateZ(Mesh3d hedron, double angle) const
 	return Mesh3d(res, std::vector<std::pair<unsigned int, unsigned int>>(hedron.getEdges()));
 }
 
-Mesh4d IGraphicsEngine::rotateW(Mesh4d hedron, double angle) const
+Mesh4d IGraphicsEngine::rotateW(Mesh4d hedron, double angle)
 {
 	std::vector<Vector4d> res;
 	res.reserve(16);

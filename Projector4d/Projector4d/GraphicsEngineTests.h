@@ -8,16 +8,16 @@
 
 class GraphicsEngineTests {
 public:
-	static bool testAll(const IGraphicsEngine & eng);
-	static bool testproject2dOrtographic3d(const IGraphicsEngine & eng);
-	static bool testproject2dOrtographic4d(const IGraphicsEngine & eng);
-	static bool testproject3dOrtographic4d(const IGraphicsEngine & eng);
-	static bool testproject2dPerspective3d(const IGraphicsEngine & eng);
-	static bool testproject2dPerspective4d(const IGraphicsEngine & eng);
-	static bool testproject3dPerspective4d(const IGraphicsEngine & eng);
-	static bool testrotate(const IGraphicsEngine & eng);
-	static bool testrotateX(const IGraphicsEngine & eng);
-	static bool testrotateY(const IGraphicsEngine & eng);
-	static bool testrotateZ(const IGraphicsEngine & eng);
-	static bool testrotateW(const IGraphicsEngine & eng);
+	static bool testAll(IGraphicsEngine* eng);
+	static bool testproject2dOrtographic3d(IGraphicsEngine* eng);
+	static bool testproject2dOrtographic4d(IGraphicsEngine* eng);
+	static bool testproject3dOrtographic4d(IGraphicsEngine* eng);
+	static bool testproject2dPerspective3d(IGraphicsEngine* eng);
+	static bool testproject2dPerspective4d(IGraphicsEngine* eng);
+	static bool testproject3dPerspective4d(IGraphicsEngine* eng);
+	static bool testrotate(IGraphicsEngine* eng);
+	static bool testrotateX(IGraphicsEngine* eng);
+	static bool testrotateY(IGraphicsEngine* eng);
+	static bool testrotateZ(IGraphicsEngine* eng);
+	static bool testrotateW(IGraphicsEngine* eng);
 };

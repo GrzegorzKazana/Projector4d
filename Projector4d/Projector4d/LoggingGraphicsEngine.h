@@ -1,18 +1,13 @@
-/*
-*Author: Grzegorz Kazana
-*Date: 28-11-2018
-*Jêzyki Asemblerowe 2018-2019
-*/
 #pragma once
 #include "IGraphicsEngine.h"
-#include "CProjectionFunctions.h"
+#include <fstream>
+//#include <string>
 
-class CGraphicsEngine :
-	public IGraphicsEngine
-{
-	CImplementations* handle;
+class LoggingGraphicsEngine : public IGraphicsEngine {
+	IGraphicsEngine* engine;
+	std::ofstream logFile;
 public:
-	CGraphicsEngine();
+	LoggingGraphicsEngine(IGraphicsEngine* eng, std::string path);
 	using IGraphicsEngine::project2dOrtographic;
 	using IGraphicsEngine::project3dOrtographic;
 	using IGraphicsEngine::project2dPerspective;
@@ -33,6 +28,5 @@ public:
 	Vector3d rotateY(Vector3d point, double angle) override;
 	Vector3d rotateZ(Vector3d point, double angle) override;
 	Vector4d rotateW(Vector4d point, double angle) override;
-	~CGraphicsEngine();
+	~LoggingGraphicsEngine();
 };
-
