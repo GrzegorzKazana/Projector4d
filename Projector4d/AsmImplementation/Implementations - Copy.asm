@@ -308,6 +308,94 @@ fillOrtographicProjectionMatrix endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
+; name: projectOrtographicImplementation
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	outarr: DWORD, address to output matrix
+;	goal_dim: DWORD, output dimention
+;	matrix_placeholder: DWORD, memory reserved for projection matrix
+; returns:
+;	none
+; modifies registers:
+;	EAX, EBX, ECX, EDX, XMM0, XMM1
+; decription:
+;	projects matrix to specified dimension without perspective
+; -------------------------------------------------------------------------------
+;projectOrtographicImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, goal_dim: DWORD, matrix_placeholder: DWORD
+	;push matrix_placeholder
+	;push goal_dim
+	;push rows
+	;call fillOrtographicProjectionMatrix	; generate projection matrix
+;
+	;push matrix_placeholder
+	;push outarr
+	;push arr
+	;push rows
+	;push cols
+	;push matrix_placeholder
+	;push goal_dim
+	;push rows
+	;call multiplyMatrix					; perform projection
+	;ret
+;projectOrtographicImplementation endp
+; -------------------------------------------------------------------------------
+
+; -------------------------------------------------------------------------------
+; name: projectPerspectiveImplementation
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	outarr: DWORD, address to output matrix
+;	goal_dim: DWORD, output dimention
+;	distance: REAL8, distance from 'camera' to objects
+;	matrix_placeholder: DWORD, memory reserved for projection matrix
+; returns:
+;	none
+; modifies registers:
+;	EAX, EBX, ECX, EDX, XMM0, XMM1
+; decription:
+;	project matrix with perspective
+; -------------------------------------------------------------------------------
+;projectPerspectiveImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, goal_dim: DWORD, distance: REAL8, matrix_placeholder: DWORD
+	;push matrix_placeholder
+	;push goal_dim
+	;push rows
+	;call fillOrtographicProjectionMatrix				; generate default projection matrix
+;
+	;push 1
+	;push 0
+	;push goal_dim
+	;call calculateMatrixIndex							; get Z coordinate ofarr
+	;mul [DOUBLE_SIZE]
+	;add eax, arr
+	;movsd xmm1, REAL8 PTR [eax]
+	;subsd xmm1, distance
+	;movsd xmm0, [ONE]
+	;divsd xmm0, xmm1									; calculate perspective scaler
+;
+	;sub esp, 8											; equal to
+	;movsd REAL8 PTR [esp], xmm0							; push xmm0
+	;push matrix_placeholder
+	;push goal_dim
+	;push rows
+	;call scaleMatrix						; scale by perspective
+;
+	;push outarr
+	;push arr
+	;push rows
+	;push cols
+	;push matrix_placeholder
+	;push goal_dim
+	;push rows
+	;call multiplyMatrix					; perform projection
+	;ret
+;projectPerspectiveImplementation endp
+; -------------------------------------------------------------------------------
+
+; -------------------------------------------------------------------------------
 ; name: fillRotationMatrix
 ; parameters: 
 ;	cols: DWORD, number of columns in matrix
@@ -373,6 +461,48 @@ fillRotationMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8, axis
 	movsd REAL8 PTR [eax], xmm0						; write -sin(angle)
 	ret
 fillRotationMatrix endp
+; -------------------------------------------------------------------------------
+
+; -------------------------------------------------------------------------------
+; name: rotateImplementation
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	outarr: DWORD, address of output matrix, assuming size is correct - equal to arr size
+;	angle: REAL8, angle of rotation
+;	axis1: DWORD, first axis modified by rotation
+;	axis2: DWORD, second axis modified by rotation
+;	matrix_placeholder: DWORD, memory reserved for projection matrix
+; returns:
+;	none
+; modifies registers:
+;	EAX, EBX, ECX, EDX, XMM0, ST7, MM7
+; decription:
+;	rotates vector by specified angle
+; -------------------------------------------------------------------------------
+;rotateImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, angle: REAL8, axis0: DWORD, axis1: DWORD, matrix_placeholder: DWORD
+	;movsd xmm0, angle
+	;push axis1
+	;push axis0
+	;sub esp, 8											; equal to
+	;movsd REAL8 PTR [esp], xmm0							; push angle
+	;push matrix_placeholder
+	;push rows
+	;push rows
+	;call fillRotationMatrix				; filling rotation matrix
+	;add esp, 28
+;
+	;push outarr
+	;push arr
+	;push rows
+	;push cols
+	;push matrix_placeholder
+	;push rows
+	;push rows
+	;call multiplyMatrix					; performing rotation
+	;ret
+;rotateImplementation endp
 ; -------------------------------------------------------------------------------
 
 ; -------------------------------------------------------------------------------
@@ -472,5 +602,43 @@ fillDoubleRotationMatrix proc cols: DWORD, rows: DWORD, arr: DWORD, angle: REAL8
 
 	ret
 fillDoubleRotationMatrix endp
+; -------------------------------------------------------------------------------
+
+; -------------------------------------------------------------------------------
+; name: rotateWImplementation
+; parameters: 
+;	cols: DWORD, number of columns in matrix
+;	rows: DWORD, number of rows in matrix
+;	arr: DWORD, address to matrix
+;	outarr: DWORD, address of output matrix
+;	angle: REAL8, angle of rotation
+;	matrix_placeholder: DWORD, memory reserved for projection matrix
+; returns:
+;	none
+; modifies registers:
+;	EAX, EBX, ECX, EDX, XMM0, ST7, MM7
+; decription:
+;	double rotation implrmrntation only
+; -------------------------------------------------------------------------------
+;rotateWImplementation proc cols: DWORD, rows: DWORD, arr: DWORD, outarr: DWORD, angle: REAL8, matrix_placeholder: DWORD
+	;movsd xmm0, angle
+	;sub esp, 8											; equal to
+	;movsd REAL8 PTR [esp], xmm0							; push angle
+	;push matrix_placeholder
+	;push rows
+	;push rows
+	;call fillDoubleRotationMatrix			; filling rotation matrix
+	;add esp, 20
+;
+	;push outarr
+	;push arr
+	;push rows
+	;push cols
+	;push matrix_placeholder
+	;push rows
+	;push rows
+	;call multiplyMatrix					; performing rotation
+	;ret
+;rotateWImplementation endp
 ; -------------------------------------------------------------------------------
 end

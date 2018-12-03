@@ -19,10 +19,11 @@ int calculateMatrixIndex(int col_index, int row_index, int cols) {
 }
 
 // scales array of doubles of given size in place
-void scaleMatrix(int cols, int rows, double* arr, double scale) {
+void scaleMatrix(int cols, int rows, double* arr, double* outarr, double scale) {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			arr[calculateMatrixIndex(j, i, cols)] *= scale;
+			auto index = calculateMatrixIndex(j, i, cols);
+			outarr[index] = arr[index] * scale;
 		}
 	}
 }
@@ -64,27 +65,6 @@ void fillOrtographicProjectionMatrix(int cols, int rows, double* arr) {
 	}
 }
 
-// project matrix
-void projectOrtographicImplementation(int cols, int rows, double* arr, double* outarr, int goal_dim, double* matrix_placeholder) {
-	// fill projection matrix
-	fillOrtographicProjectionMatrix(rows, goal_dim, matrix_placeholder);
-	// perform projection
-	multiplyMatrix(rows, goal_dim, matrix_placeholder, cols, rows, arr, outarr);
-}
-
-// project matrix
-void projectPerspectiveImplementation(int cols, int rows, double* arr, double* outarr, int goal_dim, double distance, double* matrix_placeholder) {
-	// fill projection matrix
-	fillOrtographicProjectionMatrix(rows, goal_dim, matrix_placeholder);
-	// calculate perspective scale
-	double sliced_coordinate = arr[calculateMatrixIndex(goal_dim, 0, 1)];
-	double perspective_scaler = 1.0 / (sliced_coordinate - distance);
-	// apply scale to projection matrix
-	scaleMatrix(rows, goal_dim, matrix_placeholder, perspective_scaler);
-	// perform projection
-	multiplyMatrix(rows, goal_dim, matrix_placeholder, cols, rows, arr, outarr);
-}
-
 // fills rotation matrix, which rotates specified axis
 void fillRotationMatrix(int cols, int rows, double* arr, double angle, int axis1, int axis2) {
 	fillIdentityMatrix(cols, rows, arr);
@@ -94,14 +74,6 @@ void fillRotationMatrix(int cols, int rows, double* arr, double angle, int axis1
 	arr[calculateMatrixIndex(axis2, axis2, cols)] = cos_angle;
 	arr[calculateMatrixIndex(axis1, axis2, cols)] = sin_angle;
 	arr[calculateMatrixIndex(axis2, axis1, cols)] = -sin_angle;
-}
-
-// rotates vector
-void rotateImplementation(int cols, int rows, double* arr, double* outarr, double angle, int axis0, int axis1, double* matrix_placeholder) {
-	// fill rotation matrix
-	fillRotationMatrix(rows, rows, matrix_placeholder, angle, axis0, axis1);
-	// perform rotation
-	multiplyMatrix(rows, rows, matrix_placeholder, cols, rows, arr, outarr);
 }
 
 // fills double rotation matrix, assumess given matrix is 4x4
@@ -117,12 +89,4 @@ void fillDoubleRotationMatrix(int cols, int rows, double* arr, double angle) {
 	arr[calculateMatrixIndex(2, 3, cols)] = sin_angle;
 	arr[calculateMatrixIndex(1, 0, cols)] = -sin_angle;
 	arr[calculateMatrixIndex(3, 2, cols)] = -sin_angle;
-}
-
-// double rotation implrmrntation only
-void rotateWImplementation(int cols, int rows, double* arr, double* outarr, double angle, double* matrix_placeholder) {
-	// fill rotation matrix
-	fillDoubleRotationMatrix(rows, rows, matrix_placeholder, angle);
-	// perform rotation
-	multiplyMatrix(rows, rows, matrix_placeholder, cols, rows, arr, outarr);
 }

@@ -21,9 +21,7 @@ Vector2d AsmGraphicsEngine::project2dOrtographic(Vector3d point) const
 
 Vector2d AsmGraphicsEngine::project2dOrtographic(Vector4d point) const
 {
-	Vector2d result;
-	handle->project2dOrtographic(point.get_cols(), point.get_rows(), point.data, result.data);
-	return result;
+	return project2dOrtographic(project3dOrtographic(point));
 }
 
 Vector3d AsmGraphicsEngine::project3dOrtographic(Vector4d point) const
