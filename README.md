@@ -11,8 +11,8 @@ Learn basics of point transformations in 2d-4d spaces using matrix math. [**Refe
 [**SFML**](https://www.sfml-dev.org/) - drawing canvas\
 [**WinAPI**](https://docs.microsoft.com/en-us/windows/desktop/apiindex/windows-api-list) - UI - buttons, controls
 
-C++ - ui and top-level logic
-x86 assembly - low-level functionaly mostly matrix/vector operations
+C++ - ui and top-level logic\
+x86 assembly - low-level functionaly mostly matrix/vector operations\
 C - duplicate low-level implementation for performace reference
 
 ---
