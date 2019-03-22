@@ -17,4 +17,4 @@ C - duplicate low-level implementation for performace reference
 
 ---
 ## Demonstration
-![failed](https://github.com/GrzegorzKazana/Projector4d/tree/master/Dokumentacja/Demo.gif "Logo Title Text 1")
+![failed](https://raw.githubusercontent.com/GrzegorzKazana/Projector4d/master/Dokumentacja/Demo.gif "")
