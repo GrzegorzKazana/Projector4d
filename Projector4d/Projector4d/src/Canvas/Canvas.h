@@ -5,8 +5,8 @@
 */
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Vectors.h"
-#include "Polyherdrons.h"
+#include "../Objects/Vectors.h"
+#include "../Objects/Polyherdrons.h"
 #include "windows.h"
 
 class Canvas: public sf::RenderWindow

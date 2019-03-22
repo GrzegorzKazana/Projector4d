@@ -7,7 +7,7 @@
 #include "Matrix.h"
 #include <algorithm>
 #include <iostream>
-#include "Exceptions.h"
+#include "../Exceptions/Exceptions.h"
 
 inline unsigned int index(unsigned int y, unsigned int x, unsigned int width) {
 	return y * width + x;

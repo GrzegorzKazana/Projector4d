@@ -5,7 +5,7 @@
 */
 #include "stdafx.h"
 #include "Canvas.h"
-#include "Matrix.h"
+#include "../Objects/Matrix.h"
 
 
 Canvas::Canvas(HWND hParent, sf::ContextSettings settings)

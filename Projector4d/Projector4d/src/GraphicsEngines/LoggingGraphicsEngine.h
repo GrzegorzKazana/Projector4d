@@ -6,7 +6,6 @@
 #pragma once
 #include "IGraphicsEngine.h"
 #include <fstream>
-//#include <string>
 
 class LoggingGraphicsEngine : public IGraphicsEngine {
 	IGraphicsEngine* engine;

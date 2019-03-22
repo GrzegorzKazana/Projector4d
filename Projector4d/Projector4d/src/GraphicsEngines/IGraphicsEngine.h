@@ -4,8 +4,8 @@
 *Jêzyki Asemblerowe 2018-2019
 */
 #pragma once
-#include "vectors.h"
-#include "Polyherdrons.h"
+#include "../Objects/Vectors.h"
+#include "../Objects/Polyherdrons.h"
 
 class IGraphicsEngine{
 public:

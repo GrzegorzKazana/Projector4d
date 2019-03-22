@@ -5,7 +5,8 @@
 */
 #include "stdafx.h"
 #include "Vectors.h"
-#include "Exceptions.h"
+#include "../Exceptions/Exceptions.h"
+
 
 Vector4d::Vector4d()
 	:Matrix(4, 1, 0.0)
